@@ -3,7 +3,6 @@ import numpy as np
 from typing import Type
 from microstructpy.market import Market
 from microstructpy.order import MarketOrder, LimitOrder
-from time import time
 
 class Trader:
     def __init__(self, trader_id: int, market: Market) -> None:
@@ -24,8 +23,7 @@ class LiquidityTrader(Trader):
     def update(self) -> None:
         # Submit a predefined order, for example:
         if np.random.rand() < self.submission_rate:
-            order = MarketOrder(trader_id=self.trader_id, quantity=self.volume_size*np.random.choice([-1, 1]),
-                                time=time())
+            order = MarketOrder(trader_id=self.trader_id, quantity=self.volume_size*np.random.choice([-1, 1]))
             self.market.submit_order(order)
 
 class ConstantPriceDealer(Trader):
@@ -36,7 +34,7 @@ class ConstantPriceDealer(Trader):
         self.volume = volume
 
     def update(self) -> None:
-        active_orders = [order for order in self.orders if order.status == "active"]
+        active_orders = [order for order in self.orders if order.status == "active" or order.status == "partial"]
         active_bids = [order for order in active_orders if order.quantity > 0]
         active_asks = [order for order in active_orders if order.quantity < 0]
 
@@ -44,10 +42,8 @@ class ConstantPriceDealer(Trader):
         active_ask_volume = sum([order.quantity for order in active_asks])
 
         if active_bid_volume < self.volume:
-            bid = LimitOrder(trader_id=self.trader_id, quantity=self.volume - active_bid_volume, price=self.price-self.spread//2,
-                             time=time())
+            bid = LimitOrder(trader_id=self.trader_id, quantity=self.volume - active_bid_volume, price=self.price-self.spread//2)
             self.market.submit_order(bid)
         if active_ask_volume > -self.volume:
-            ask = LimitOrder(trader_id=self.trader_id, quantity=-self.volume - active_ask_volume, price=self.price+self.spread//2,
-                             time=time())
+            ask = LimitOrder(trader_id=self.trader_id, quantity=-self.volume - active_ask_volume, price=self.price+self.spread//2)
             self.market.submit_order(ask)

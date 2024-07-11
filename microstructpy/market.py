@@ -6,7 +6,8 @@ class Market:
         self.orders       = []
         self.participants = []
         self.trade_history = []
-    
+        self.last_submission_time = 0
+
     def submit_order(self, order):
         raise NotImplementedError("This method should be overridden by subclasses")
 
@@ -27,6 +28,9 @@ class ContinousOrderBookMarket(Market):
                 print(f"REJECT {order}")
                 return None
         
+        self.last_submission_time += 1
+        order.time = self.last_submission_time
+
         if order.quantity > 0:
             self.bid_ob.append(order)
         else:
@@ -52,6 +56,7 @@ class ContinousOrderBookMarket(Market):
         self.bid_ob = sorted(self.bid_ob, key=lambda x: x.price, reverse=True)
         self.ask_ob = sorted(self.ask_ob, key=lambda x: x.price)
         self.visualize_order_book() 
+        
         if self.bid_ob and self.ask_ob:
             while self.bid_ob[0].price >= self.ask_ob[0].price:
                 if self.bid_ob[0].quantity == abs(self.ask_ob[0].quantity):
@@ -59,6 +64,7 @@ class ContinousOrderBookMarket(Market):
                     self.ask_ob[0].status = "filled"
                     fill_volume = abs(self.bid_ob[0].quantity)
                     fill_price = self.bid_ob[0].price if self.bid_ob[0].time < self.ask_ob[0].time else self.ask_ob[0].price
+                    agressor_side =( self.bid_ob[0].time < self.ask_ob[0].time)*2 - 1
                     self.bid_ob.pop(0)
                     self.ask_ob.pop(0)
                 elif self.bid_ob[0].quantity > abs(self.ask_ob[0].quantity):
@@ -66,7 +72,9 @@ class ContinousOrderBookMarket(Market):
                     self.ask_ob[0].status = "filled"
                     self.bid_ob[0].status = "partial"
                     fill_volume = abs(self.ask_ob[0].quantity)
+                    print(self.bid_ob[0].time, self.ask_ob[0].time)
                     fill_price = self.bid_ob[0].price if self.bid_ob[0].time < self.ask_ob[0].time else self.ask_ob[0].price
+                    agressor_side =( self.bid_ob[0].time < self.ask_ob[0].time)*2 - 1
                     self.ask_ob.pop(0)
                 else:
                     self.ask_ob[0].quantity += self.bid_ob[0].quantity
@@ -74,9 +82,10 @@ class ContinousOrderBookMarket(Market):
                     self.ask_ob[0].status = "partial"
                     fill_volume = abs(self.bid_ob[0].quantity)
                     fill_price = self.bid_ob[0].price if self.bid_ob[0].time < self.ask_ob[0].time else self.ask_ob[0].price
+                    agressor_side =( self.bid_ob[0].time < self.ask_ob[0].time)*2 - 1
                     self.bid_ob.pop(0)
-                print(f"TRADE: {fill_volume} @ {fill_price}") 
-                self.trade_history.append((fill_price, int(fill_volume)))
+                print(f"TRADE: {fill_volume} @ {fill_price}, AGGRESSOR: {agressor_side}") 
+                self.trade_history.append((fill_price, int(fill_volume), agressor_side))
                 if self.bid_ob == [] or self.ask_ob == []:
                     break
 
