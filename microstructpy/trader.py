@@ -1,5 +1,6 @@
 # trader.py
 import numpy as np
+import random
 from typing import Type
 from microstructpy.market import Market
 from microstructpy.order import MarketOrder, LimitOrder
@@ -9,6 +10,8 @@ class Trader:
         self.trader_id = trader_id
         self.market    = market
         self.orders    = []
+        self.filled_trades = []
+        self.position  = 0
         self.market.participants.append(self)
 
     def submit_order(self) -> None:
@@ -23,8 +26,25 @@ class LiquidityTrader(Trader):
     def update(self) -> None:
         # Submit a predefined order, for example:
         if np.random.rand() < self.submission_rate:
-            order = MarketOrder(trader_id=self.trader_id, quantity=self.volume_size*np.random.choice([-1, 1]))
+            order = MarketOrder(trader_id=self.trader_id, quantity=self.volume_size*random.choice([-1, 1]))
             self.market.submit_order(order)
+
+class InformedTrader(Trader):
+    def __init__(self, trader_id: int, market: Market, position_limit: int, target_price: int) -> None: 
+        super().__init__(trader_id, market)
+        self.position_limit = position_limit
+        self.target_price   = target_price
+
+    def update(self) -> None:
+        # Submit a predefined order, for example:
+        pass
+
+
+
+
+
+
+
 
 class ConstantPriceDealer(Trader):
     def __init__(self, trader_id: int, market: Market, price: int, spread: int, volume:int) -> None:

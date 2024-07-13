@@ -1,0 +1,5 @@
+- Add historical trades for each trader
+- Add pnl Calculation to each trader
+- Add informed trader
+- Add MM with bayesian updating
+- Add market analysis module
