@@ -1,6 +1,7 @@
 import numpy as np
 from microstructpy.orders.base import Order
 
+
 class MarketOrder(Order):
     def __init__(self, trader_id: int, quantity) -> None:
         super().__init__(trader_id, quantity)

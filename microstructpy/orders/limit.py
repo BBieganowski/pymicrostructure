@@ -1,5 +1,6 @@
 from microstructpy.orders.base import Order
 
+
 class LimitOrder(Order):
     def __init__(self, trader_id: int, quantity: int, price: int) -> None:
         super().__init__(trader_id, quantity)
