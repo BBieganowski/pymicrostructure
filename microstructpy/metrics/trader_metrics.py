@@ -1,174 +1,206 @@
 import pandas as pd
 import numpy as np
 from microstructpy.traders.base import Trader
+from typing import List, Tuple, Dict
 
-def position_history(trader):
+def position_history(trader: Trader) -> Tuple[List[int], List[int]]:
+    """
+    Calculate the position history of a trader.
+
+    Args:
+        trader (Trader): The trader object.
+
+    Returns:
+        Tuple[List[int], List[int]]: A tuple containing two lists:
+            - List of timestamps
+            - List of positions at each timestamp
+    """
     position = 0
-    position_history = [0]  # Start with initial position of 0
-    position_timestamps = [0]  # Start with timestamp 0
+    position_history = [0]
+    position_timestamps = [0]
 
     final_timestamp = trader.market.last_submission_time
     trade_index = 0
+    filled_trades = trader.filled_trades
 
     for timestamp in range(1, final_timestamp + 1):
-        # Process any trades at this timestamp
-        while (
-            trade_index < len(trader.filled_trades)
-            and trader.filled_trades[trade_index]["time"] == timestamp
-        ):
-            trade = trader.filled_trades[trade_index]
-            position += trade["volume"]
+        while (trade_index < len(filled_trades) and 
+               filled_trades[trade_index]["time"] == timestamp):
+            position += filled_trades[trade_index]["volume"]
             trade_index += 1
 
-        # Append the current position to the history
         position_history.append(position)
         position_timestamps.append(timestamp)
 
     return position_timestamps, position_history
 
+def profit_history(trader: Trader) -> Tuple[List[int], List[float]]:
+    """
+    Calculate the profit history of a trader.
 
-def profit_history(trader):
+    Args:
+        trader (Trader): The trader object.
+
+    Returns:
+        Tuple[List[int], List[float]]: A tuple containing two lists:
+            - List of timestamps
+            - List of cumulative profits at each timestamp
+    """
     realized_profit = 0
-    unrealized_profit = 0
     position = 0
-
     profit = [0]
     profit_timestamps = [0]
 
     final_timestamp = trader.market.last_submission_time
-    trade_history = trader.filled_trades.copy()
+    trade_history = trader.filled_trades
+    trade_index = 0
+    midprices = dict(trader.market.midprices)
 
-    for timestamp in range(final_timestamp + 1):
-        # Process trades at this timestamp
-        while trade_history and trade_history[0]["time"] == timestamp:
-            trade = trade_history.pop(0)
-            volume = trade["volume"]
-            price = trade["price"]
+    for timestamp in range(1, final_timestamp + 1):
+        while (trade_index < len(trade_history) and 
+               trade_history[trade_index]["time"] == timestamp):
+            trade = trade_history[trade_index]
+            realized_profit -= trade["volume"] * trade["price"]
+            position += trade["volume"]
+            trade_index += 1
 
-            # Calculate realized profit
-            realized_profit -= volume * price
-            position += volume
-
-        # Mark position to market
-        midprice = [x[1] for x in trader.market.midprices if x[0] == timestamp][0]
-
-        # Calculate unrealized profit
-        unrealized_profit = position * midprice
-
-        # Calculate total profit
-        total_profit = realized_profit + unrealized_profit
+        midprice = midprices.get(timestamp, midprices[timestamp-1])
+        total_profit = realized_profit + position * midprice
 
         profit.append(total_profit)
         profit_timestamps.append(timestamp)
 
     return profit_timestamps, profit
 
+def calculate_trader_metrics(trader: Trader) -> Dict[str, float]:
+    """
+    Calculate various performance metrics for a trader.
 
-def final_profit(trader):
+    Args:
+        trader (Trader): The trader object.
+
+    Returns:
+        Dict[str, float]: A dictionary of calculated metrics.
+    """
+    pos_timestamps, pos_hist = position_history(trader)
+    profit_timestamps, profit_hist = profit_history(trader)
+    
+    profit_series = pd.Series(profit_hist)
+    profit_diff = profit_series.diff()
+    
+    filled_trades = trader.filled_trades
+    total_volume = sum(abs(trade["volume"]) for trade in filled_trades)
+    
+    agressor_volume = sum(abs(trade['volume']) for trade in filled_trades 
+                          if trade['volume'] * trade['agressor_side'] > 0)
+    passive_volume = total_volume - agressor_volume
+
+    return {
+        "final_profit": profit_hist[-1],
+        "final_position": pos_hist[-1],
+        "profit_per_state": profit_diff.mean(),
+        "std_profit_per_state": profit_diff.std(),
+        "information_ratio": profit_diff.mean() / profit_diff.std() if profit_diff.std() != 0 else 0,
+        "total_trades": len(filled_trades),
+        "volume_traded": total_volume,
+        "profit_per_volume": profit_hist[-1] / total_volume if total_volume != 0 else 0,
+        "average_trade_size": total_volume / len(filled_trades) if filled_trades else 0,
+        "fill_rate": total_volume / sum(abs(order.quantity) for order in trader.orders) if trader.orders else 0,
+        "time_in_market": sum(1 for pos in pos_hist if pos != 0) / len(pos_hist),
+        "mean_position": np.mean(pos_hist),
+        "mean_abs_position": np.mean(np.abs(pos_hist)),
+        "volume_as_agressor": agressor_volume,
+        "volume_as_passive": passive_volume,
+        "agressor_ratio": agressor_volume / total_volume if total_volume != 0 else 0
+    }
+
+def participants_report(participants: List[Trader]) -> pd.DataFrame:
+    """
+    Generate a performance report for multiple traders.
+
+    Args:
+        participants (List[Trader]): A list of trader objects.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing performance metrics for all traders.
+    """
+    metrics = {f"{trader.__class__.__name__}_{trader.trader_id}": calculate_trader_metrics(trader)
+               for trader in participants}
+    return pd.DataFrame(metrics).round(2)
+
+# For backwards compatibility, we can keep these individual functions:
+def final_profit(trader: Trader) -> float:
+    """Get the final profit of a trader."""
     return profit_history(trader)[1][-1]
 
-def final_position(trader):
+def final_position(trader: Trader) -> int:
+    """Get the final position of a trader."""
     return position_history(trader)[1][-1]
 
-def profit_per_state(trader):
-    profit = profit_history(trader)[1]
-    return pd.Series(profit).diff().mean()
+def profit_per_state(trader: Trader) -> float:
+    """Calculate the average profit per state for a trader."""
+    return pd.Series(profit_history(trader)[1]).diff().mean()
 
-def std_profit_per_state(trader):
-    profit = profit_history(trader)[1]
-    return pd.Series(profit).diff().std()
+def std_profit_per_state(trader: Trader) -> float:
+    """Calculate the standard deviation of profit per state for a trader."""
+    return pd.Series(profit_history(trader)[1]).diff().std()
 
-def information_ratio(trader):
+def information_ratio(trader: Trader) -> float:
+    """Calculate the information ratio for a trader."""
     std = std_profit_per_state(trader)
-    if std == 0:
-        return 0
-    return profit_per_state(trader) / std
+    return profit_per_state(trader) / std if std != 0 else 0
 
-def total_trades(trader):
+def total_trades(trader: Trader) -> int:
+    """Get the total number of trades for a trader."""
     return len(trader.filled_trades)
 
-def volume_traded(trader):
-    return sum([abs(trade["volume"]) for trade in trader.filled_trades])
+def volume_traded(trader: Trader) -> float:
+    """Calculate the total volume traded by a trader."""
+    return sum(abs(trade["volume"]) for trade in trader.filled_trades)
 
-def profit_per_volume(trader):
-    volume = volume_traded(trader)
-    if volume == 0:
-        return 0
-    return final_profit(trader) /volume
+def profit_per_volume(trader: Trader) -> float:
+    """Calculate the profit per unit volume for a trader."""
+    vol = volume_traded(trader)
+    return final_profit(trader) / vol if vol != 0 else 0
 
-def average_trade_size(trader):
-    trade_n = total_trades(trader)
-    if trade_n == 0:
-        return 0
-    return volume_traded(trader) / trade_n
+def average_trade_size(trader: Trader) -> float:
+    """Calculate the average trade size for a trader."""
+    trades = total_trades(trader)
+    return volume_traded(trader) / trades if trades != 0 else 0
 
-def fill_rate(trader):
-    volume_submitted = sum([abs(x.quantity) for x in trader.orders])
-    volume_filled = volume_traded(trader)
-    if volume_submitted == 0:
-        return 0
-    return volume_filled / volume_submitted
+def fill_rate(trader: Trader) -> float:
+    """Calculate the fill rate for a trader."""
+    volume_submitted = sum(abs(x.quantity) for x in trader.orders)
+    return volume_traded(trader) / volume_submitted if volume_submitted != 0 else 0
 
-def time_in_market(trader):
+def time_in_market(trader: Trader) -> float:
+    """Calculate the proportion of time the trader held a non-zero position."""
     pos_hist = position_history(trader)[1]
-    nonzeros = [x for x in pos_hist if x != 0]
-    return len(nonzeros) / len(pos_hist)
+    return sum(1 for x in pos_hist if x != 0) / len(pos_hist)
 
-def mean_position(trader):
+def mean_position(trader: Trader) -> float:
+    """Calculate the mean position of a trader."""
     return np.mean(position_history(trader)[1])
 
-def mean_abs_position(trader):
-    return np.mean([abs(x) for x in position_history(trader)[1]])
+def mean_abs_position(trader: Trader) -> float:
+    """Calculate the mean absolute position of a trader."""
+    return np.mean(np.abs(position_history(trader)[1]))
 
-def volume_as_agressor(trader):
-    trades = trader.filled_trades
-    agressor_volume = 0
-    for trade in trades:
-        if trade['volume']*trade['agressor_side'] > 0:
-            agressor_volume += abs(trade['volume'])
-    return agressor_volume
+def volume_as_agressor(trader: Trader) -> float:
+    """Calculate the volume traded as an aggressor."""
+    return sum(abs(trade['volume']) for trade in trader.filled_trades 
+               if trade['volume'] * trade['agressor_side'] > 0)
 
-def volume_as_passive(trader):
-    trades = trader.filled_trades
-    passive_volume = 0
-    for trade in trades:
-        if trade['volume']*trade['agressor_side'] < 0:
-            passive_volume += abs(trade['volume'])
-    return passive_volume
+def volume_as_passive(trader: Trader) -> float:
+    """Calculate the volume traded as a passive participant."""
+    return sum(abs(trade['volume']) for trade in trader.filled_trades 
+               if trade['volume'] * trade['agressor_side'] < 0)
 
-def agressor_ratio(trader):
-    agressor = volume_as_agressor(trader)
-    passive = volume_as_passive(trader)
-    if agressor + passive == 0:
-        return 0
-    return agressor / (agressor + passive)
+def agressor_ratio(trader: Trader) -> float:
+    """Calculate the ratio of aggressive to total volume."""
+    total_vol = volume_traded(trader)
+    return volume_as_agressor(trader) / total_vol if total_vol != 0 else 0
 
-
-def trader_report(trader):
-    metrics = {
-        "final_profit": final_profit(trader),
-        "final_position": final_position(trader),
-        "profit_per_state": profit_per_state(trader),
-        "std_profit_per_state": std_profit_per_state(trader),
-        "information_ratio": information_ratio(trader),
-        "total_trades": total_trades(trader),
-        "volume_traded": volume_traded(trader),
-        "profit_per_volume": profit_per_volume(trader),
-        "average_trade_size": average_trade_size(trader),
-        "fill_rate": fill_rate(trader),
-        "time_in_market": time_in_market(trader),
-        "mean_position": mean_position(trader),
-        "mean_abs_position": mean_abs_position(trader),
-        "volume_as_agressor": volume_as_agressor(trader),
-        "volume_as_passive": volume_as_passive(trader),
-        "agressor_ratio": agressor_ratio(trader),
-    }
-    return metrics
-
-def participants_report(participants):
-    metrics = {}
-    for trader in participants:
-        name = f"{trader.__class__.__name__}_{trader.trader_id}"
-        metrics[name] = trader_report(trader)
-    df = pd.DataFrame(metrics).round(2)
-    return df
+def trader_report(trader: Trader) -> Dict[str, float]:
+    """Generate a comprehensive report for a single trader."""
+    return calculate_trader_metrics(trader)

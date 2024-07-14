@@ -16,5 +16,24 @@ class Trader:
         self.position = 0
         self.market.participants.append(self)
 
+    def cancel_orders(self, side) -> None:
+        for order in self.orders:
+            if order.status == "active" or order.status == "partial" and np.sign(order.quantity) == side:
+                order.status = "canceled"
+                self.market.cancellations.append(order)
+        self.market.drop_cancelled_orders()
+
+    def cancel_all_orders(self) -> None:
+        for order in self.orders:
+            if order.status == "active" or order.status == "partial":
+                order.status = "canceled"
+                self.market.cancellations.append(order)
+        self.market.drop_cancelled_orders()
+
+    
+        
+        
+
+
     def submit_order(self) -> None:
         raise NotImplementedError("This method should be overridden by subclasses")

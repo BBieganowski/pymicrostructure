@@ -1,6 +1,8 @@
 from microstructpy.markets.base import Market
 from microstructpy.orders.market import MarketOrder
+from microstructpy.orders.base import Order
 import random
+from typing import Union
 
 
 class ContinousOrderBookMarket(Market):
@@ -10,34 +12,46 @@ class ContinousOrderBookMarket(Market):
         self.ask_ob = []
         self.ob_snapshots = []
         self.midprices = [(0, 0)]
+        self.cancellations = []
         self.duration = None
         self.current_tick = 0
 
-    def submit_order(self, order):
-        if isinstance(order, MarketOrder):
-            if order.quantity > 0 and self.ask_ob == []:
-                order.status = "rejected"
-                return None
-            elif order.quantity < 0 and self.bid_ob == []:
-                order.status = "rejected"
-                return None
-
+    def submit_order(self, orders: Union[Order, list[Order]]):
+        
+        if not isinstance(orders, list):
+            orders = [orders]
+        
         self.last_submission_time += 1
-        order.time = self.last_submission_time
+        for order in orders:
+            
+            if isinstance(order, MarketOrder):
+                if order.quantity > 0 and self.ask_ob == []:
+                    order.status = "rejected"
+                    break
+                elif order.quantity < 0 and self.bid_ob == []:
+                    order.status = "rejected"
+                    break
 
-        if order.quantity > 0:
-            self.bid_ob.append(order)
-        else:
-            self.ask_ob.append(order)
-        order.status = "active"
-        submitting_trader = [
-            participant
-            for participant in self.participants
-            if participant.trader_id == order.trader_id
-        ][0]
-        submitting_trader.orders.append(order)
+            order.time = self.last_submission_time
+
+            if order.quantity > 0:
+                self.bid_ob.append(order)
+            else:
+                self.ask_ob.append(order)
+            order.status = "active"
+            submitting_trader = [
+                participant
+                for participant in self.participants
+                if participant.trader_id == order.trader_id
+            ][0]
+            submitting_trader.orders.append(order)
+        
         self.match_orders()
         self.save_ob_state()
+
+    def drop_cancelled_orders(self):
+        self.bid_ob = [order for order in self.bid_ob if order.status != "canceled"]
+        self.ask_ob = [order for order in self.ask_ob if order.status != "canceled"]
 
     def save_ob_state(self):
         # Aggregate orders at the same price level
