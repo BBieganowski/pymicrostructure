@@ -10,7 +10,6 @@ from typing import List
 
 
 def participant_comparison(participants: List[Trader]):
-
     fig, axs = plt.subplots(2, len(participants))
     # adjust size
     fig.set_size_inches(15, 10)
@@ -60,7 +59,7 @@ def price_path(market: Market):
     plt.plot(ob_time, best_bid, label="Best Bid", color="green")
     plt.plot(ob_time, best_ask, label="Best Ask", color="red")
 
-    #plt.scatter(time, prices, c=agressor_side, cmap="RdYlGn_r", label="Trades")
+    # plt.scatter(time, prices, c=agressor_side, cmap="RdYlGn_r", label="Trades")
 
     plt.xlabel("Time")
     plt.ylabel("Price")

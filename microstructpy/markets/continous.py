@@ -17,13 +17,11 @@ class ContinousOrderBookMarket(Market):
         self.current_tick = 0
 
     def submit_order(self, orders: Union[Order, list[Order]]):
-        
         if not isinstance(orders, list):
             orders = [orders]
-        
+
         self.last_submission_time += 1
         for order in orders:
-            
             if isinstance(order, MarketOrder):
                 if order.quantity > 0 and self.ask_ob == []:
                     order.status = "rejected"
@@ -45,7 +43,7 @@ class ContinousOrderBookMarket(Market):
                 if participant.trader_id == order.trader_id
             ][0]
             submitting_trader.orders.append(order)
-        
+
         self.match_orders()
         self.save_ob_state()
 
@@ -114,7 +112,7 @@ class ContinousOrderBookMarket(Market):
 
             self.execute_trade(buyer, seller, fill_price, fill_volume, agressor_side)
 
-            bid_order.filled += fill_volume 
+            bid_order.filled += fill_volume
             ask_order.filled -= fill_volume
 
             self.update_order_status(bid_order)

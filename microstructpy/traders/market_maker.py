@@ -3,10 +3,12 @@ from microstructpy.orders.limit import LimitOrder
 from microstructpy.markets.base import Market
 import numpy as np
 
+
 class MarketMaker(Trader):
     """
     Dummy market maker that places a bid and ask at a fixed price and volume.
     """
+
     def __init__(
         self, trader_id: int, market: Market, price: int, spread: int, volume: int
     ) -> None:
@@ -47,8 +49,15 @@ class BayesianMarketMaker(Trader):
     """
     Market maker that uses a Bayesian model to set prices.
     """
-    def __init__(self, trader_id: int, market: Market, name: str = None,
-                 initial_fair_value:int=100, initial_uncertainty:float=1) -> None:
+
+    def __init__(
+        self,
+        trader_id: int,
+        market: Market,
+        name: str = None,
+        initial_fair_value: int = 100,
+        initial_uncertainty: float = 1,
+    ) -> None:
         super().__init__(trader_id, market, name)
         self.fair_value = initial_fair_value
         self.uncertainty = initial_uncertainty
@@ -61,7 +70,7 @@ class BayesianMarketMaker(Trader):
             mean_sign = np.median(signs)
 
             self.fair_value += mean_sign
-        
+
         self.cancel_all_orders()
 
         bid = LimitOrder(
@@ -70,14 +79,9 @@ class BayesianMarketMaker(Trader):
             price=int(self.fair_value - 5),
         )
 
-        
         ask = LimitOrder(
             trader_id=self.trader_id,
             quantity=-100,
             price=int(self.fair_value + 5),
         )
         self.market.submit_order([bid, ask])
-    
-
-
-        
