@@ -10,3 +10,4 @@ class Order:
         self.quantity = quantity
         self.time = None
         self.status = "created"
+        self.filled = 0

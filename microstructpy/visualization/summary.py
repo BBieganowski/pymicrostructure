@@ -1,8 +1,8 @@
 from microstructpy.markets.base import Market
 from microstructpy.traders.base import Trader
 from microstructpy.metrics.trader_metrics import (
-    get_position_history,
-    get_profit_history,
+    position_history,
+    profit_history,
 )
 import matplotlib.pyplot as plt
 
@@ -17,8 +17,8 @@ def participant_comparison(participants: List[Trader]):
 
     for i, participant in enumerate(participants):
         trader_type = type(participant).__name__
-        pos_ts, pos_hist = get_position_history(participant)
-        pnl_ts, pnl_hist = get_profit_history(participant)
+        pos_ts, pos_hist = position_history(participant)
+        pnl_ts, pnl_hist = profit_history(participant)
 
         axs[0, i].plot(pos_ts, pos_hist)
         axs[0, i].set_title(f"{trader_type} {participant.trader_id} Position")
@@ -45,7 +45,7 @@ def price_path(market: Market):
     """
     print(market.trade_history)
     prices = [trade["price"] for trade in market.trade_history]
-    aggressor_side = [trade["aggressor_side"] for trade in market.trade_history]
+    agressor_side = [trade["agressor_side"] for trade in market.trade_history]
     time = [trade["time"] for trade in market.trade_history]
 
     best_bid = [
@@ -61,7 +61,7 @@ def price_path(market: Market):
     plt.plot(ob_time, best_bid, label="Best Bid", color="green")
     plt.plot(ob_time, best_ask, label="Best Ask", color="red")
 
-    plt.scatter(time, prices, c=aggressor_side, cmap="RdYlGn_r", label="Trades")
+    plt.scatter(time, prices, c=agressor_side, cmap="RdYlGn_r", label="Trades")
 
     plt.xlabel("Time")
     plt.ylabel("Price")

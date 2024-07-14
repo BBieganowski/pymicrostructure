@@ -74,8 +74,10 @@ class ContinousOrderBookMarket(Market):
                     (bid_ob_snapshot[0]["price"] + ask_ob_snapshot[0]["price"]) / 2,
                 )
             )
-        else:
+        elif self.current_tick == 0:
             self.midprices.append((self.last_submission_time, 0))
+        else:
+            self.midprices.append((self.last_submission_time, self.midprices[-1][1]))
 
     def match_orders(self):
         self.bid_ob.sort(key=lambda x: x.price, reverse=True)
@@ -91,35 +93,35 @@ class ContinousOrderBookMarket(Market):
                 bid_order.price if bid_order.time < ask_order.time else ask_order.price
             )
             fill_volume = min(bid_order.quantity, abs(ask_order.quantity))
-            aggressor_side = 1 if bid_order.time < ask_order.time else -1
+            agressor_side = -1 if bid_order.time < ask_order.time else 1
 
             buyer = self.get_participant(bid_order.trader_id)
             seller = self.get_participant(ask_order.trader_id)
 
-            self.execute_trade(buyer, seller, fill_price, fill_volume, aggressor_side)
+            self.execute_trade(buyer, seller, fill_price, fill_volume, agressor_side)
 
-            bid_order.quantity -= fill_volume
-            ask_order.quantity += fill_volume
+            bid_order.filled += fill_volume 
+            ask_order.filled -= fill_volume
 
             self.update_order_status(bid_order)
             self.update_order_status(ask_order)
 
-            if bid_order.quantity == 0:
+            if bid_order.status == "filled":
                 self.bid_ob.pop(0)
-            if ask_order.quantity == 0:
+            if ask_order.status == "filled":
                 self.ask_ob.pop(0)
 
     def get_participant(self, trader_id):
         return next(p for p in self.participants if p.trader_id == trader_id)
 
-    def execute_trade(self, buyer, seller, price, volume, aggressor_side):
+    def execute_trade(self, buyer, seller, price, volume, agressor_side):
         buyer.position += volume
         seller.position -= volume
 
         trade_info = {
             "price": price,
             "volume": volume,
-            "aggressor_side": aggressor_side,
+            "agressor_side": agressor_side,
             "time": self.last_submission_time,
         }
 
@@ -134,7 +136,7 @@ class ContinousOrderBookMarket(Market):
         self.trade_history.append(trade_info)
 
     def update_order_status(self, order):
-        if order.quantity == 0:
+        if order.quantity == order.filled:
             order.status = "filled"
         else:
             order.status = "partial"
