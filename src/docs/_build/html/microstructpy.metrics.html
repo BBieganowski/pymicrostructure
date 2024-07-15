@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>microstructpy.metrics package &mdash; microstructpy 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="microstructpy.orders package" href="microstructpy.orders.html" />
+    <link rel="prev" title="microstructpy.markets package" href="microstructpy.markets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            microstructpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="microstructpy.html">microstructpy package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="microstructpy.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="microstructpy.markets.html">microstructpy.markets package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">microstructpy.metrics package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="microstructpy.orders.html">microstructpy.orders package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="microstructpy.traders.html">microstructpy.traders package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="microstructpy.visualization.html">microstructpy.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="microstructpy.html#module-microstructpy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">microstructpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+          <li class="breadcrumb-item"><a href="microstructpy.html">microstructpy package</a></li>
+      <li class="breadcrumb-item active">microstructpy.metrics package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/microstructpy.metrics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="microstructpy-metrics-package">
+<h1>microstructpy.metrics package<a class="headerlink" href="#microstructpy-metrics-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-microstructpy.metrics.market">
+<span id="microstructpy-metrics-market-module"></span><h2>microstructpy.metrics.market module<a class="headerlink" href="#module-microstructpy.metrics.market" title="Link to this heading"></a></h2>
+<p>Range of metrics to analyze market data.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.amihud_illiquidity">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">amihud_illiquidity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#amihud_illiquidity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.amihud_illiquidity" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window Amihud illiquidity measure (lambda) based on trade history.</p>
+<section id="parameters">
+<h3>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’, ‘volume’, and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window (in number of periods). Default is 20.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with an ‘amihud_lambda’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.effective_spread">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">effective_spread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#effective_spread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.effective_spread" title="Link to this definition"></a></dt>
+<dd><p>Calculate the effective spread of a market for a given order size.</p>
+<p>The effective spread is the difference between the execution price of a market order
+and the midpoint price, multiplied by 2 to account for round-trip costs.</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have an ‘ob_snapshots’ attribute.
+Each snapshot should be a dictionary with ‘bid’ and ‘ask’ keys, containing lists
+of price-volume pairs.</p>
+</dd>
+<dt>volume<span class="classifier">float</span></dt><dd><p>The size of the market order to simulate.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns:<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with ‘effective_spread_buy’ and ‘effective_spread_sell’ columns,
+indexed by snapshot times.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.hurst_exponent">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">hurst_exponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#hurst_exponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.hurst_exponent" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling Hurst exponent for a price series.</p>
+<section id="id3">
+<h3>Parameters:<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’ and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+<dt>max_lag<span class="classifier">int, optional</span></dt><dd><p>The maximum lag to consider in the R/S calculation. Default is 20.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘hurst_exponent’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.kyle_lambda">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">kyle_lambda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#kyle_lambda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.kyle_lambda" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window Kyle’s Lambda based on trade history.</p>
+<section id="id5">
+<h3>Parameters:<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’, ‘volume’, ‘agressor_side’, and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window (in number of periods). Default is 20.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns:<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘kyle_lambda’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.order_book_depth">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">order_book_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#order_book_depth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.order_book_depth" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window order book depth based on order book snapshots.</p>
+<p>The order book depth is the total volume at the best bid and best ask prices.</p>
+<section id="id7">
+<h3>Parameters:<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have an ‘ob_snapshots’ attribute.
+Each snapshot should be a dictionary with ‘bid’ and ‘ask’ keys, containing lists
+of price-volume pairs.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Returns:<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with ‘bid_depth’ and ‘ask_depth’ columns, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.order_flow_imbalance">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">order_flow_imbalance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#order_flow_imbalance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.order_flow_imbalance" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window order flow imbalance based on trade history.</p>
+<p>The order flow imbalance is the ratio of buy volume to total volume.</p>
+<section id="id9">
+<h3>Parameters:<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘volume’ and ‘agressor_side’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns:<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with an ‘order_flow_imbalance’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.quoted_spread">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">quoted_spread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#quoted_spread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.quoted_spread" title="Link to this definition"></a></dt>
+<dd><p>Calculate the quoted spread of a market.</p>
+<p>The quoted spread is the difference between the best bid and best ask prices.</p>
+<section id="id11">
+<h3>Parameters:<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have an ‘ob_snapshots’ attribute.
+Each snapshot should be a dictionary with ‘bid’ and ‘ask’ keys.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns:<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘quoted_spread’ column, indexed by snapshot times.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.realized_volatility">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">realized_volatility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#realized_volatility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.realized_volatility" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window realized volatility based on trade history.</p>
+<p>Realized volatility is the standard deviation of price returns over a given window.</p>
+<section id="id13">
+<h3>Parameters:<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’ and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns:<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘realized_volatility’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.returns_autocorrelation">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">returns_autocorrelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#returns_autocorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.returns_autocorrelation" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window auto-correlation of returns based on trade history.</p>
+<section id="id15">
+<h3>Parameters:<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’, ‘time’, and ‘agressor_side’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window (in number of periods). Default is 20.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h3>Returns:<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘returns_autocorr’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.roll_spread_estimator">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">roll_spread_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#roll_spread_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.roll_spread_estimator" title="Link to this definition"></a></dt>
+<dd><p>Estimate the rolling spread of a market based on its trade history.</p>
+<p>This function calculates the rolling spread using a covariance-based method
+on the price changes over a specified window size.</p>
+<section id="id17">
+<h3>Parameters:<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’ and ‘time’ keys.</p>
+</dd>
+<dt>window_size<span class="classifier">int, optional (default=100)</span></dt><dd><p>The size of the rolling window for spread estimation.</p>
+</dd>
+<dt>relative<span class="classifier">bool, optional (default=False)</span></dt><dd><p>If True, calculate relative price changes instead of absolute changes.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Returns:<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘roll_spread’ column, indexed by trade times.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h3>Notes:<a class="headerlink" href="#notes" title="Link to this heading"></a></h3>
+<p>The roll spread is estimated as:
+roll_spread = mult * sqrt(-cov(delta_price_t, delta_price_t-1))
+where mult is 200 for relative changes and 2 for absolute changes.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.rolling_adf_test">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">rolling_adf_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#rolling_adf_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.rolling_adf_test" title="Link to this definition"></a></dt>
+<dd><p>Perform a rolling Augmented Dickey-Fuller test on price series.</p>
+<section id="id19">
+<h3>Parameters:<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’ and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+<dt>alpha<span class="classifier">float, optional</span></dt><dd><p>The significance level for the test. Default is 0.05.</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h3>Returns:<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with ‘adf_statistic’, ‘p_value’, and ‘is_stationary’ columns, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.rolling_cancellation_rate">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">rolling_cancellation_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#rolling_cancellation_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.rolling_cancellation_rate" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window cancellation rate based on order history.</p>
+<p>The cancellation rate is the number of canceled orders divided by the total number of orders.</p>
+<section id="id21">
+<h3>Parameters:<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘cancellations’ and ‘order_history’ attribute.
+Each order in the history should be a dictionary with ‘status’ and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h3>Returns:<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘cancellation_rate’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.trade_midprice_deviation">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">trade_midprice_deviation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#trade_midprice_deviation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.trade_midprice_deviation" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window deviation of trade prices from the midprice based on trade history.</p>
+<p>The midprice is the average of the best bid and best ask prices.</p>
+<section id="id23">
+<h3>Parameters:<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have an ‘ob_snapshots’ and ‘trade_history’ attribute.
+Each snapshot should be a dictionary with ‘bid’ and ‘ask’ keys, containing lists of price-volume pairs.
+Each trade in the history should be a dictionary with ‘price’ and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id24">
+<h3>Returns:<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘trade_midprice_deviation’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.trade_sign_autocorrelation">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">trade_sign_autocorrelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#trade_sign_autocorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.trade_sign_autocorrelation" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window auto-correlation of trade signs based on trade history.</p>
+<p>The trade sign is the sign of the trade price change.</p>
+<section id="id25">
+<h3>Parameters:<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’, ‘time’, and ‘agressor_side’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h3>Returns:<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘trade_sign_autocorr’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.variance_ratio_test">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">variance_ratio_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#variance_ratio_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.variance_ratio_test" title="Link to this definition"></a></dt>
+<dd><p>Perform a rolling Variance Ratio test on price series.</p>
+<section id="id27">
+<h3>Parameters:<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’ and ‘time’ keys.</p>
+</dd>
+<dt>k<span class="classifier">int, optional</span></dt><dd><p>The number of periods to use for the k-period return. Default is 5.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h3>Returns:<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with ‘vr_statistic’ and ‘p_value’ columns, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.market.vwap">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.market.</span></span><span class="sig-name descname"><span class="pre">vwap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">market</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.markets.html#microstructpy.markets.base.Market" title="microstructpy.markets.base.Market"><span class="pre">Market</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/market.html#vwap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.market.vwap" title="Link to this definition"></a></dt>
+<dd><p>Calculate the rolling window volume-weighted average price (VWAP) based on trade history.</p>
+<section id="id29">
+<h3>Parameters:<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>market<span class="classifier">Market</span></dt><dd><p>An object representing the market, which must have a ‘trade_history’ attribute.
+Each trade in the history should be a dictionary with ‘price’, ‘volume’, and ‘time’ keys.</p>
+</dd>
+<dt>window<span class="classifier">int, optional</span></dt><dd><p>The size of the rolling window. Default is 100.</p>
+</dd>
+</dl>
+</section>
+<section id="id30">
+<h3>Returns:<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with a ‘vwap’ column, indexed by time.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-microstructpy.metrics.trader_metrics">
+<span id="microstructpy-metrics-trader-metrics-module"></span><h2>microstructpy.metrics.trader_metrics module<a class="headerlink" href="#module-microstructpy.metrics.trader_metrics" title="Link to this heading"></a></h2>
+<p>Metric for analyzing trader performance.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.agressor_ratio">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">agressor_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#agressor_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.agressor_ratio" title="Link to this definition"></a></dt>
+<dd><p>Calculate the ratio of aggressive to total volume.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.average_trade_size">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">average_trade_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#average_trade_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.average_trade_size" title="Link to this definition"></a></dt>
+<dd><p>Calculate the average trade size for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.calculate_trader_metrics">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">calculate_trader_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#calculate_trader_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.calculate_trader_metrics" title="Link to this definition"></a></dt>
+<dd><p>Calculate various performance metrics for a trader.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>trader (Trader): The trader object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Dict[str, float]: A dictionary of calculated metrics.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.fill_rate">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">fill_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#fill_rate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.fill_rate" title="Link to this definition"></a></dt>
+<dd><p>Calculate the fill rate for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.final_position">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">final_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#final_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.final_position" title="Link to this definition"></a></dt>
+<dd><p>Get the final position of a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.final_profit">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">final_profit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#final_profit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.final_profit" title="Link to this definition"></a></dt>
+<dd><p>Get the final profit of a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.information_ratio">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">information_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#information_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.information_ratio" title="Link to this definition"></a></dt>
+<dd><p>Calculate the information ratio for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.mean_abs_position">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">mean_abs_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#mean_abs_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.mean_abs_position" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean absolute position of a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.mean_position">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">mean_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#mean_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.mean_position" title="Link to this definition"></a></dt>
+<dd><p>Calculate the mean position of a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.participants_report">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">participants_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">participants</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#participants_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.participants_report" title="Link to this definition"></a></dt>
+<dd><p>Generate a performance report for multiple traders.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>participants (List[Trader]): A list of trader objects.</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame: A DataFrame containing performance metrics for all traders.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.position_history">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">position_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#position_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.position_history" title="Link to this definition"></a></dt>
+<dd><p>Calculate the position history of a trader.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>trader (Trader): The trader object.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>Tuple[List[int], List[int]]: A tuple containing two lists:</dt><dd><ul class="simple">
+<li><p>List of timestamps</p></li>
+<li><p>List of positions at each timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.profit_history">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">profit_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#profit_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.profit_history" title="Link to this definition"></a></dt>
+<dd><p>Calculate the profit history of a trader.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>trader (Trader): The trader object.</p>
+</dd>
+<dt>Returns:</dt><dd><dl class="simple">
+<dt>Tuple[List[int], List[float]]: A tuple containing two lists:</dt><dd><ul class="simple">
+<li><p>List of timestamps</p></li>
+<li><p>List of cumulative profits at each timestamp</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.profit_per_state">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">profit_per_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#profit_per_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.profit_per_state" title="Link to this definition"></a></dt>
+<dd><p>Calculate the average profit per state for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.profit_per_volume">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">profit_per_volume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#profit_per_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.profit_per_volume" title="Link to this definition"></a></dt>
+<dd><p>Calculate the profit per unit volume for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.std_profit_per_state">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">std_profit_per_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#std_profit_per_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.std_profit_per_state" title="Link to this definition"></a></dt>
+<dd><p>Calculate the standard deviation of profit per state for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.time_in_market">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">time_in_market</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#time_in_market"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.time_in_market" title="Link to this definition"></a></dt>
+<dd><p>Calculate the proportion of time the trader held a non-zero position.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.total_trades">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">total_trades</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#total_trades"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.total_trades" title="Link to this definition"></a></dt>
+<dd><p>Get the total number of trades for a trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.trader_report">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">trader_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#trader_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.trader_report" title="Link to this definition"></a></dt>
+<dd><p>Generate a comprehensive report for a single trader.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.volume_as_agressor">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">volume_as_agressor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#volume_as_agressor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.volume_as_agressor" title="Link to this definition"></a></dt>
+<dd><p>Calculate the volume traded as an aggressor.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.volume_as_passive">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">volume_as_passive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#volume_as_passive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.volume_as_passive" title="Link to this definition"></a></dt>
+<dd><p>Calculate the volume traded as a passive participant.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="microstructpy.metrics.trader_metrics.volume_traded">
+<span class="sig-prename descclassname"><span class="pre">microstructpy.metrics.trader_metrics.</span></span><span class="sig-name descname"><span class="pre">volume_traded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#microstructpy.traders.base.Trader" title="microstructpy.traders.base.Trader"><span class="pre">Trader</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/microstructpy/metrics/trader_metrics.html#volume_traded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#microstructpy.metrics.trader_metrics.volume_traded" title="Link to this definition"></a></dt>
+<dd><p>Calculate the total volume traded by a trader.</p>
+</dd></dl>
+
+</section>
+<section id="module-microstructpy.metrics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-microstructpy.metrics" title="Link to this heading"></a></h2>
+<p>Metrics for both trader and market performance.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="microstructpy.markets.html" class="btn btn-neutral float-left" title="microstructpy.markets package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="microstructpy.orders.html" class="btn btn-neutral float-right" title="microstructpy.orders package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bartosz Bieganowski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
