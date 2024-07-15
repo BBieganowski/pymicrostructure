@@ -1,3 +1,5 @@
+"""Module for visualizing simulation results."""
+
 from microstructpy.markets.base import Market
 from microstructpy.traders.base import Trader
 from microstructpy.metrics.trader_metrics import (
@@ -10,11 +12,20 @@ from typing import List
 
 
 def participant_comparison(participants: List[Trader]):
-    fig, axs = plt.subplots(2, len(participants))
+    """
+    Compare the position and profit history of a list of participants.
+
+    Parameters
+    ----------
+    participants : List[Trader]
+        A list of participants to compare.
+    """
+    included_participants = [p for p in participants if p.include_in_results]
+    fig, axs = plt.subplots(2, len(included_participants))
     # adjust size
     fig.set_size_inches(15, 10)
 
-    for i, participant in enumerate(participants):
+    for i, participant in enumerate(included_participants):
         trader_type = type(participant).__name__
         pos_ts, pos_hist = position_history(participant)
         pnl_ts, pnl_hist = profit_history(participant)
@@ -26,6 +37,7 @@ def participant_comparison(participants: List[Trader]):
         axs[1, i].plot(pnl_ts, pnl_hist)
         axs[1, i].set_title(f"{trader_type} {participant.trader_id} Profit")
         axs[1, i].set_xlabel("Trade Number")
+
     plt.show()
 
 
@@ -55,7 +67,7 @@ def price_path(market: Market):
         for snapshot in market.ob_snapshots
     ]
     ob_time = [snapshot["time"] for snapshot in market.ob_snapshots]
-
+    plt.figure(figsize=(15, 5))
     plt.plot(ob_time, best_bid, label="Best Bid", color="green")
     plt.plot(ob_time, best_ask, label="Best Ask", color="red")
 

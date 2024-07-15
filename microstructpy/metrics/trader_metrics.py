@@ -1,3 +1,5 @@
+"""Metric for analyzing trader performance."""
+
 import pandas as pd
 import numpy as np
 from microstructpy.traders.base import Trader
@@ -110,16 +112,18 @@ def calculate_trader_metrics(trader: Trader) -> Dict[str, float]:
         "final_position": pos_hist[-1],
         "profit_per_state": profit_diff.mean(),
         "std_profit_per_state": profit_diff.std(),
-        "information_ratio": profit_diff.mean() / profit_diff.std()
-        if profit_diff.std() != 0
-        else 0,
+        "information_ratio": (
+            profit_diff.mean() / profit_diff.std() if profit_diff.std() != 0 else 0
+        ),
         "total_trades": len(filled_trades),
         "volume_traded": total_volume,
         "profit_per_volume": profit_hist[-1] / total_volume if total_volume != 0 else 0,
         "average_trade_size": total_volume / len(filled_trades) if filled_trades else 0,
-        "fill_rate": total_volume / sum(abs(order.quantity) for order in trader.orders)
-        if trader.orders
-        else 0,
+        "fill_rate": (
+            total_volume / sum(abs(order.volume) for order in trader.orders)
+            if trader.orders
+            else 0
+        ),
         "time_in_market": sum(1 for pos in pos_hist if pos != 0) / len(pos_hist),
         "mean_position": np.mean(pos_hist),
         "mean_abs_position": np.mean(np.abs(pos_hist)),
@@ -144,6 +148,7 @@ def participants_report(participants: List[Trader]) -> pd.DataFrame:
             trader
         )
         for trader in participants
+        if trader.include_in_results
     }
     return pd.DataFrame(metrics).round(2)
 
@@ -199,7 +204,7 @@ def average_trade_size(trader: Trader) -> float:
 
 def fill_rate(trader: Trader) -> float:
     """Calculate the fill rate for a trader."""
-    volume_submitted = sum(abs(x.quantity) for x in trader.orders)
+    volume_submitted = sum(abs(x.volume) for x in trader.orders)
     return volume_traded(trader) / volume_submitted if volume_submitted != 0 else 0
 
 
