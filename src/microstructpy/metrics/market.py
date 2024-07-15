@@ -98,8 +98,8 @@ def effective_spread(
             sell_execution_price = calculate_execution_price(bid_orders, volume)
 
             if buy_execution_price and sell_execution_price:
-                effective_spread_buy = 2 * (buy_execution_price - mid_price)
-                effective_spread_sell = -2 * (mid_price - sell_execution_price)
+                effective_spread_buy = 2 * abs((buy_execution_price - mid_price))
+                effective_spread_sell = -2 * abs((mid_price - sell_execution_price))
                 if relative:
                     effective_spread_buy /= mid_price
                     effective_spread_sell /= mid_price

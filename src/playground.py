@@ -1,35 +1,39 @@
 # %%
 from microstructpy.markets.continous import ContinousOrderBookMarket
-from microstructpy.traders.noise import NoiseTrader
-from microstructpy.traders.market_maker import MarketMaker, BayesianMarketMaker
-from microstructpy.traders.informed import InformedTrader, TWAPTrader
+from microstructpy.traders.noise import *
+from microstructpy.traders.market_maker import *
+from microstructpy.traders.informed import *
+from microstructpy.traders.ensemble import ensemble_traders
 from microstructpy.visualization.summary import participant_comparison, price_path
 from microstructpy.metrics.trader_metrics import *
+from microstructpy.metrics.market import *
+from functools import partial
 
 import time
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-# %%
-market = ContinousOrderBookMarket()
-
+import math
 
 # %%
 def noise_volume():
     return np.random.normal(5, 5)
 
+# %%
+market      = ContinousOrderBookMarket()
+
+liq_trader  = NoiseTrader(market, submission_rate=1, volume_size=lambda: np.random.normal(5, 10))
+
+dealer2     = BaseMarketMaker(market, fair_price_strategy=fairprice_of_sign,
+                              spread_strategy            =spread_fixed,
+                              volume_strategy            =volume_max_fraction,
+                              initial_fair_price=100, 
+                              max_inventory=200)
+
+
 
 # %%
-liq_trader = NoiseTrader(
-    1, market, submission_rate=1, volume_size=lambda: np.random.normal(5, 5)
-)
-dealer = BayesianMarketMaker(2, market, initial_fair_value=100)
-dealer2 = BayesianMarketMaker(5, market, initial_fair_value=100, spread=4)
-inf_trader = TWAPTrader(3, market, position_target=500, target_price=120)
-
-# %%
-market.run(1000)
+market.run(5000)
 
 # %%
 participant_comparison(market.participants)
@@ -39,12 +43,29 @@ price_path(market)
 participants_report(market.participants)
 
 # %%
-plt.plot([x[1] for x in market.midprices if x[1] > 0])
+quoted_spread(market).plot(figsize=(15,5))
+effective_spread(market, volume=50).plot(figsize=(15,5))
+amihud_illiquidity(market).plot(figsize=(15,5))
+order_book_depth(market).plot(figsize=(15,5))
+order_flow_imbalance(market).plot(figsize=(15,5))
 
 # %%
-market.midprices
+market.ob_snapshots[-20:]
 
 # %%
-market.ob_snapshots[-10:]
+ts, profit = profit_history(liq_trader)
+ts[-1]
 
 # %%
+pd.Series(profit, index=ts)
+
+# %%
+len(profit)
+
+# %%
+math.isnan(profit[-1])
+
+# %%
+
+
+

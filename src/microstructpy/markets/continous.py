@@ -5,6 +5,7 @@ from microstructpy.orders.market import MarketOrder
 from microstructpy.orders.base import Order
 import random
 from typing import Union
+from tqdm import tqdm
 
 
 class ContinousOrderBookMarket(Market):
@@ -139,10 +140,13 @@ class ContinousOrderBookMarket(Market):
             {"price": price, "volume": volume}
             for price, volume in zip(bid_prices, bid_volumes)
         ]
+        # sort
+        bid_ob_snapshot.sort(key=lambda x: x["price"], reverse=True)
         ask_ob_snapshot = [
             {"price": price, "volume": volume}
             for price, volume in zip(ask_prices, ask_volumes)
         ]
+        ask_ob_snapshot.sort(key=lambda x: x["price"])
         self.ob_snapshots.append(
             {
                 "bid": bid_ob_snapshot,
@@ -160,6 +164,7 @@ class ContinousOrderBookMarket(Market):
         elif self.current_tick == 0:
             self.midprices.append((self.last_submission_time, 0))
         else:
+            # last not empty midprice
             self.midprices.append((self.last_submission_time, self.midprices[-1][1]))
 
     def match_orders(self):
@@ -200,6 +205,13 @@ class ContinousOrderBookMarket(Market):
             if ask_order.status == "filled":
                 self.ask_ob.pop(0)
             trade_counter += 1
+        
+        # if market order remains in the order book, cancel rest
+        for order in self.bid_ob + self.ask_ob:
+            if isinstance(order, MarketOrder):
+                order.status = "canceled"
+                self.cancellations.append(order)
+        self.drop_cancelled_orders()
 
     def get_participant(self, trader_id):
         """
@@ -284,9 +296,39 @@ class ContinousOrderBookMarket(Market):
             The number of ticks to run the simulation (default is 10).
         """
         self.duration = ticks
-        for tick in range(ticks):
+        for tick in tqdm(range(ticks)):
             self.current_tick = tick
             random.shuffle(self.participants)
             for participant in self.participants:
                 participant.update()
         self.completed = True
+
+    @property
+    def best_bid(self):
+        return self.bid_ob[0].price if self.bid_ob else None
+
+    @property
+    def best_ask(self):
+        return self.ask_ob[0].price if self.ask_ob else None
+
+    @property
+    def midprice(self):
+        if self.ask_ob and self.bid_ob:
+            return (self.best_ask + self.best_bid) / 2
+        else:
+            return None
+
+    @property
+    def spread(self):
+        return (
+            self.best_ask - self.best_bid
+            if self.best_bid is not None and self.best_ask is not None
+            else None
+        )
+
+    def get_recent_trades(self, n=10):
+        return (
+            self.trade_history[-n:]
+            if len(self.trade_history) > n
+            else self.trade_history
+        )

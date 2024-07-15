@@ -3,119 +3,107 @@
 from microstructpy.traders.base import Trader
 from microstructpy.orders.limit import LimitOrder
 from microstructpy.markets.base import Market
+from typing import Tuple, Callable
+from functools import partial
 import numpy as np
 
 
-class MarketMaker(Trader):
-    """
-    Dummy market maker that places a bid and ask at a fixed price and volume.
-
-    Market makers are traders that provide liquidity to a market by placing orders on both sides of the order book.
-
-    Attributes:
-    -----------
-    trader_id : int
-        The ID of the trader.
-    market : Market
-        The market in which the trader participates.
-    price : int
-        The fair price around which to place the orders.
-    spread : int
-        The spread between the bid and ask prices.
-    volume : int
-        The volume of the orders.
-
-    Methods:
-    --------
-    update()
-        Update the trader's orders.
-    """
-
-    def __init__(
-        self, trader_id: int, market: Market, price: int, spread: int, volume: int
-    ) -> None:
-        """Initialize a new MarketMaker."""
-        super().__init__(trader_id, market)
-        self.price = price
-        self.spread = spread
-        self.volume = volume
-
-    def update(self) -> None:
-        """Update the trader's orders."""
-        active_orders = [
-            order
-            for order in self.orders
-            if order.status == "active" or order.status == "partial"
-        ]
-        active_bids = [order for order in active_orders if order.volume > 0]
-        active_asks = [order for order in active_orders if order.volume < 0]
-
-        active_bid_volume = sum([order.volume for order in active_bids])
-        active_ask_volume = sum([order.volume for order in active_asks])
-
-        if active_bid_volume < self.volume:
-            bid = LimitOrder(
-                trader_id=self.trader_id,
-                volume=self.volume - active_bid_volume,
-                price=self.price - self.spread // 2,
-            )
-            self.market.submit_order(bid)
-        if active_ask_volume > -self.volume:
-            ask = LimitOrder(
-                trader_id=self.trader_id,
-                volume=-self.volume - active_ask_volume,
-                price=self.price + self.spread // 2,
-            )
-            self.market.submit_order(ask)
-
-
-class BayesianMarketMaker(Trader):
-    """Market maker that uses a Bayesian model to set prices."""
-
+class BaseMarketMaker(Trader):
     def __init__(
         self,
         market: Market,
+        fair_price_strategy: Callable,
+        spread_strategy: Callable,
+        volume_strategy: Callable,
+        initial_fair_price: int,
+        max_inventory: int,
         name: str = None,
-        spread: int = 3,
-        initial_fair_value: int = 100,
-        initial_uncertainty: float = 1,
-        max_inventory: int = 1000,
-    ) -> None:
-        """Initialize a new BayesianMarketMaker."""
+    ):
         super().__init__(market, name)
-        self.fair_value = initial_fair_value
-        self.uncertainty = initial_uncertainty
-        self.spread = spread
+        self.fair_price_strategy = fair_price_strategy
+        self.spread_strategy = spread_strategy
+        self.volume_strategy = volume_strategy
+        self.fair_price = initial_fair_price
         self.max_inventory = max_inventory
 
     def update(self) -> None:
-        """Update the trader's orders."""
-        if self.market.trade_history:
-            participant_count = len(self.market.participants)
-            last_trades = self.market.trade_history[-10:]
-            signs = [trade["agressor_side"] for trade in last_trades]
-            mean_sign = np.median(signs)
-
-            self.fair_value += mean_sign
+        self.fair_price        = self.fair_price_strategy(self)
+        bid_offset, ask_offset = self.spread_strategy(self)
+        bid_volume, ask_volume = self.volume_strategy(self)
 
         self.cancel_all_orders()
 
         orders = []
-        bid_size = self.max_inventory - self.position
-        if bid_size != 0:
+        if bid_volume > 0:
             bid = LimitOrder(
                 trader_id=self.trader_id,
-                volume=min(self.max_inventory - self.position, 100),
-                price=int(self.fair_value - self.spread // 2),
+                volume=bid_volume,
+                price=self.fair_price + bid_offset,
             )
             orders.append(bid)
 
-        ask_size = -self.max_inventory - self.position
-        if ask_size != 0:
+        if ask_volume < 0:
             ask = LimitOrder(
                 trader_id=self.trader_id,
-                volume=max(-self.max_inventory - self.position, -100),
-                price=int(self.fair_value + self.spread // 2),
+                volume=ask_volume,
+                price=self.fair_price + ask_offset,
             )
             orders.append(ask)
+
         self.market.submit_order(orders)
+
+
+class ConstantMarketMaker(BaseMarketMaker):
+    def __init__(
+        self,
+        market: Market,
+        price: int,
+        max_inventory: int,
+        spread: int,
+        name: str = None,
+    ):
+        super().__init__(
+            market,
+            partial(fairprice_constant, price=price),
+            partial(spread_fixed, halfspread=spread),
+            partial(volume_max_fraction, max_frac=1),
+            price,
+            max_inventory,
+            name,
+        )
+
+
+def fairprice_constant(trader: BaseMarketMaker, price: int = 100) -> int:
+    return price
+
+
+def fairprice_of_sign(trader: BaseMarketMaker, window_size: int = 5) -> int:
+    trades = trader.market.get_recent_trades(window_size)
+    of = (
+        1
+        if sum([trade["volume"] * trade["agressor_side"] for trade in trades]) > 0
+        else -1
+    )
+    return trader.fair_price + of
+
+
+def volume_max_fraction(trader: BaseMarketMaker, max_frac: float = 0.5) -> Tuple[int, int]:
+    max_bid = trader.max_inventory - trader.position
+    max_ask = -trader.max_inventory - trader.position
+    max_size = int(trader.max_inventory * max_frac)
+    bid_volume = min(max_bid, max_size)
+    ask_volume = max(max_ask, -max_size)
+    return bid_volume, ask_volume
+
+
+def spread_fixed(trader: BaseMarketMaker, halfspread: int = 2) -> int:
+    return (-halfspread, halfspread)
+
+
+def spread_position_linear(
+    trader: BaseMarketMaker, neutral_halfspread: int
+) -> Tuple[int, int]:
+    normalized_position = trader.position / trader.max_inventory
+    bid_offset = int(-neutral_halfspread - neutral_halfspread * normalized_position)
+    ask_offset = int(neutral_halfspread - neutral_halfspread * normalized_position)
+    return (bid_offset, ask_offset)

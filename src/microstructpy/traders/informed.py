@@ -59,12 +59,12 @@ class TWAPTrader(InformedTrader):
         ticks_remaining = self.market.duration - self.market.current_tick
         volume_remaining = self.position_target - self.position
         volume_per_tick = volume_remaining / ticks_remaining
-
+        self.cancel_all_orders()
         if abs(volume_per_tick) < 1:
             if np.random.rand() < abs(volume_per_tick):
                 order = LimitOrder(
                     trader_id=self.trader_id,
-                    volume=np.sign(volume_per_tick),
+                    volume=int(np.sign(volume_per_tick)),
                     price=self.target_price,
                 )
                 self.market.submit_order(order)

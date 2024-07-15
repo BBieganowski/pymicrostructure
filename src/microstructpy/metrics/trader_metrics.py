@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from microstructpy.traders.base import Trader
 from typing import List, Tuple, Dict
+import math
 
 
 def position_history(trader: Trader) -> Tuple[List[int], List[int]]:
@@ -69,12 +70,13 @@ def profit_history(trader: Trader) -> Tuple[List[int], List[float]]:
         ):
             trade = trade_history[trade_index]
             realized_profit -= trade["volume"] * trade["price"]
+            if math.isnan(realized_profit):
+                print(trade["volume"], trade["price"])
             position += trade["volume"]
             trade_index += 1
 
         midprice = midprices.get(timestamp, midprices[timestamp - 1])
         total_profit = realized_profit + position * midprice
-
         profit.append(total_profit)
         profit_timestamps.append(timestamp)
 
