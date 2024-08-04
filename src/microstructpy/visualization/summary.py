@@ -42,7 +42,6 @@ def participant_comparison(participants: List[Trader]):
         axs[1, i].set_ylim(min(pnl_hist), max(pnl_hist))
         axs[1, i].set_xlim(0, len(pnl_ts))
 
-
     plt.tight_layout()
     plt.show()
 

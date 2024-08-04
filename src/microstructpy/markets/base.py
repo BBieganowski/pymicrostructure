@@ -1,6 +1,7 @@
 """Base module for financial markets."""
 
 from microstructpy.orders.market import MarketOrder
+from typing import List, Any
 import random
 
 
@@ -38,11 +39,11 @@ class Market:
         and trade history, and set initial values for last submission time and completion
         status.
         """
-        self.orders = []
-        self.participants = []
-        self.trade_history = []
-        self.last_submission_time = 0
-        self.completed = False
+        self.orders: List[Any] = []
+        self.participants: List[Any] = []
+        self.trade_history: List[dict] = []
+        self.last_submission_time: float = 0
+        self.completed: bool = False
 
     def submit_order(self, order):
         """

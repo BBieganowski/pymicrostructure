@@ -70,8 +70,6 @@ def profit_history(trader: Trader) -> Tuple[List[int], List[float]]:
         ):
             trade = trade_history[trade_index]
             realized_profit -= trade["volume"] * trade["price"]
-            if math.isnan(realized_profit):
-                print(trade["volume"], trade["price"])
             position += trade["volume"]
             trade_index += 1
 
@@ -155,7 +153,6 @@ def participants_report(participants: List[Trader]) -> pd.DataFrame:
     return pd.DataFrame(metrics).round(2)
 
 
-# For backwards compatibility, we can keep these individual functions:
 def final_profit(trader: Trader) -> float:
     """Get the final profit of a trader."""
     return profit_history(trader)[1][-1]

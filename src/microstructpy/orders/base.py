@@ -41,6 +41,6 @@ class Order:
         self.filled = 0
 
     @property
-    def active_volume(self):
+    def active_volume(self) -> int:
         """Calculate the volume of the order that has not yet been filled."""
         return self.volume - self.filled

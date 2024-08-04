@@ -38,26 +38,21 @@ class BaseMarketMaker(Trader):
         # Ensure it's not filled immediately
         if self.prevent_market_orders:
             if self.market.best_ask:
-                bid_price = min(bid_price, self.market.best_ask-0.01)
+                bid_price = min(bid_price, self.market.best_ask - 0.01)
             if self.market.best_bid:
-                ask_price = max(ask_price, self.market.best_bid+0.01)
+                ask_price = max(ask_price, self.market.best_bid + 0.01)
 
         orders = []
         if bid_volume > 0:
             bid = LimitOrder(
-                trader_id=self.trader_id,
-                volume=bid_volume,
-                price=bid_price
+                trader_id=self.trader_id, volume=bid_volume, price=bid_price
             )
             orders.append(bid)
 
         if ask_volume < 0:
             ask = LimitOrder(
-                trader_id=self.trader_id,
-                volume=ask_volume,
-                price=ask_price
+                trader_id=self.trader_id, volume=ask_volume, price=ask_price
             )
             orders.append(ask)
 
         self.market.submit_order(orders)
-    

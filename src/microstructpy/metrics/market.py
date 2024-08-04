@@ -69,6 +69,7 @@ def effective_spread(
         A DataFrame with 'effective_spread_buy' and 'effective_spread_sell' columns,
         indexed by snapshot times.
     """
+    assert volume > 0, "Volume must be positive."
 
     def calculate_execution_price(orders, volume):
         remaining_volume = volume
@@ -148,6 +149,8 @@ def amihud_illiquidity(market: Market, window: int = 20) -> pd.DataFrame:
 
     # Calculate dollar volume
     trades_df["dollar_volume"] = trades_df["price"] * trades_df["volume"]
+
+    assert 0 not in trades_df["dollar_volume"], "Dollar volume cannot be zero."
 
     # Calculate Amihud measure
     trades_df["daily_amihud"] = abs(trades_df["return"]) / trades_df["dollar_volume"]
@@ -384,7 +387,6 @@ def rolling_adf_test(
 
         result = adfuller(prices, autolag="AIC")
         adf_statistic, p_value = result[0], result[1]
-        is_stationary = p_value < alpha
 
         return adf_statistic
 
@@ -541,15 +543,34 @@ def order_book_depth(market: Market, window: int = 100) -> pd.DataFrame:
 
 
 def order_book_heatmap(market: Market, frequency: int = 10) -> pd.DataFrame:
+    """
+    Create a heatmap of order book volumes over time.
+
+    Parameters:
+    -----------
+    market : Market
+        An object representing the market, which must have an 'ob_snapshots' attribute.
+        Each snapshot should be a dictionary with 'bid' and 'ask' keys, containing lists
+        of price-volume pairs.
+    frequency : int, optional
+        The frequency of snapshots to include in the heatmap. Default is 10.
+        This parameter can be used to reduce the computation time of the heatmap.
+        At a cost of less resolution.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A DataFrame with order book volumes indexed by time and price level.
+    """
     df = pd.DataFrame()
     for i in market.ob_snapshots[::10]:
-        timestamp = i['time']
-        bid_prices = np.array([b['price'] for b in i['bid']])
-        bid_volumes = np.array([b['volume'] for b in i['bid']])
+        timestamp = i["time"]
+        bid_prices = np.array([b["price"] for b in i["bid"]])
+        bid_volumes = np.array([b["volume"] for b in i["bid"]])
         bid_volumes = np.cumsum(bid_volumes)
 
-        ask_prices = np.array([a['price'] for a in i['ask']])
-        ask_volumes = np.array([a['volume'] for a in i['ask']])
+        ask_prices = np.array([a["price"] for a in i["ask"]])
+        ask_volumes = np.array([a["volume"] for a in i["ask"]])
         ask_volumes = np.cumsum(ask_volumes)
 
         cols = np.append(bid_prices, ask_prices)
@@ -558,9 +579,10 @@ def order_book_heatmap(market: Market, frequency: int = 10) -> pd.DataFrame:
         df_slice = pd.DataFrame(index=[timestamp], columns=cols, data=[data])
         df = pd.concat([df, df_slice])
     df = df[df.columns.sort_values()]
-    bids = df[df>0].bfill(axis=1).fillna(0)
-    asks = df[df<0].ffill(axis=1).abs().fillna(0)
+    bids = df[df > 0].bfill(axis=1).fillna(0)
+    asks = df[df < 0].ffill(axis=1).abs().fillna(0)
     return (bids + asks).T[::-1]
+
 
 ################ PRICE DYNAMICS METRICS ####################
 
@@ -739,6 +761,7 @@ def roll_spread_estimator(
 
 
 ################ OTHER METRICS METRICS ################
+
 
 def news_goodness(market: Market, window: int = 20) -> pd.DataFrame:
     """

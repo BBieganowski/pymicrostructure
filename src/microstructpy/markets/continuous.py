@@ -1,15 +1,17 @@
-"""Continous type markets module for financial markets."""
+"""Continuous type markets module for financial markets."""
 
 from microstructpy.markets.base import Market
 from microstructpy.orders.market import MarketOrder
 from microstructpy.orders.base import Order
+from microstructpy.traders.base import Trader
 from operator import itemgetter, attrgetter
 import random
-from typing import Union
+from typing import Union, List, Dict, Any, Optional, Tuple
 from tqdm import tqdm
 from dill import load, dump
 
-class ContinousDoubleAuction(Market):
+
+class ContinuousDoubleAuction(Market):
     """
     Represents a continuous order book market, extending the base Market class.
 
@@ -58,24 +60,23 @@ class ContinousDoubleAuction(Market):
 
     def __init__(self, initial_fair_price: int = 100):
         """
-        Initialize a new ContinousDoubleAuction instance.
+        Initialize a new ContinuousDoubleAuction instance.
 
         Sets up empty order books, snapshots, midprices, and other tracking attributes.
         """
         super().__init__()
-        self.bid_ob = []
-        self.ask_ob = []
-        self.ob_snapshots = []
-        self.midprices = [(0, 0)]
-        self.cancellations = []
-        self.duration = None
-        self.current_tick = 0
-        self.initial_fair_price = initial_fair_price
-
-        self.news_arrival_rate = 0.1
-        self.good_news_prob = 0.5
-        self.news_history = [0]
-        self.msg_history = []
+        self.bid_ob: List[Order] = []
+        self.ask_ob: List[Order] = []
+        self.ob_snapshots: List[Dict[str, Any]] = []
+        self.midprices: List[Tuple[int, float]] = [(0, 0)]
+        self.cancellations: List[Order] = []
+        self.duration: Optional[int] = None
+        self.current_tick: int = 0
+        self.initial_fair_price: int = initial_fair_price
+        self.news_arrival_rate: float = 0.1
+        self.good_news_prob: float = 0.5
+        self.news_history: List[int] = [0]
+        self.msg_history: List[Tuple[int, str, Any]] = []
 
     def submit_order(self, orders: Union[Order, list[Order]]):
         """
@@ -93,17 +94,21 @@ class ContinousDoubleAuction(Market):
             orders = [orders]
 
         self.last_submission_time += 1
-        
+
         for order in orders:
-            
+
             if isinstance(order, MarketOrder):
-                if order.volume > 0 and self.ask_ob == []:
-                    self.msg_history.append((self.last_submission_time, "REJECT", order))
-                    
+                if order.volume > 0 and not self.ask_ob:
+                    self.msg_history.append(
+                        (self.last_submission_time, "REJECT", order)
+                    )
+
                     order.status = "rejected"
                     break
-                elif order.volume < 0 and self.bid_ob == []:
-                    self.msg_history.append((self.last_submission_time, "REJECT", order))
+                elif order.volume < 0 and not self.bid_ob:
+                    self.msg_history.append(
+                        (self.last_submission_time, "REJECT", order)
+                    )
                     order.status = "rejected"
                     break
 
@@ -115,12 +120,11 @@ class ContinousDoubleAuction(Market):
             else:
                 self.ask_ob.append(order)
             order.status = "active"
-            submitting_trader = [
-                participant
-                for participant in self.participants
-                if participant.trader_id == order.trader_id
-            ][0]
-            submitting_trader.orders.append(order)
+            try:
+                submitting_trader = next(participant for participant in self.participants if participant.trader_id == order.trader_id)
+                submitting_trader.orders.append(order)
+            except StopIteration:
+                raise ValueError(f"No trader found with ID {order.trader_id}")
 
         self.match_orders()
         self.save_ob_state()
@@ -240,9 +244,12 @@ class ContinousDoubleAuction(Market):
         Participant
             The participant object with the matching trader ID.
         """
-        return next(p for p in self.participants if p.trader_id == trader_id)
+        try: 
+            return next(p for p in self.participants if p.trader_id == trader_id)
+        except StopIteration:
+            raise ValueError(f"No trader found with ID {trader_id}")
 
-    def execute_trade(self, buyer, seller, price, volume, agressor_side):
+    def execute_trade(self, buyer: Trader, seller: Trader, price: float, volume: Union[int, float], agressor_side: int) -> None:
         """
         Execute a trade between two participants.
 
@@ -280,10 +287,16 @@ class ContinousDoubleAuction(Market):
         seller_trade["volume"] = -volume
         seller.filled_trades.append(seller_trade)
 
-        self.msg_history.append((self.last_submission_time, "TRADE", f"{trade_info['volume']} @ {trade_info['price']}, AGG: {trade_info['agressor_side']}"))
+        self.msg_history.append(
+            (
+                self.last_submission_time,
+                "TRADE",
+                f"{trade_info['volume']} @ {trade_info['price']}, AGG: {trade_info['agressor_side']}",
+            )
+        )
         self.trade_history.append(trade_info)
 
-    def update_order_status(self, order):
+    def update_order_status(self, order: Order):
         """
         Update the status of an order after matching.
 
@@ -297,7 +310,7 @@ class ContinousDoubleAuction(Market):
         else:
             order.status = "partial"
 
-    def run(self, ticks=10):
+    def run(self, ticks:int=10):
         """
         Run the market simulation for a specified number of ticks.
 
@@ -312,53 +325,55 @@ class ContinousDoubleAuction(Market):
         self.duration = ticks
         for tick in tqdm(range(ticks)):
             self.current_tick = tick
-            
+
             # News Arrival
             if random.random() < self.news_arrival_rate:
-                self.news_history.append(1 if random.random() < self.good_news_prob else -1)
+                self.news_history.append(
+                    1 if random.random() < self.good_news_prob else -1
+                )
             else:
                 self.news_history.append(0)
-            
+
             random.shuffle(self.participants)
             for participant in self.participants:
                 participant.update()
         self.completed = True
 
     @property
-    def best_bid(self):
+    def best_bid(self) -> Optional[float]:
         return self.bid_ob[0].price if self.bid_ob else None
 
     @property
-    def best_ask(self):
+    def best_ask(self) -> Optional[float]:
         return self.ask_ob[0].price if self.ask_ob else None
 
     @property
-    def midprice(self):
+    def midprice(self) -> Optional[float]:
         if self.ask_ob and self.bid_ob:
             return (self.best_ask + self.best_bid) / 2
         else:
             return None
 
     @property
-    def spread(self):
+    def spread(self) -> Optional[float]:
         return (
             self.best_ask - self.best_bid
             if self.best_bid is not None and self.best_ask is not None
             else None
         )
 
-    def get_recent_trades(self, n=10):
+    def get_recent_trades(self, n:int=10) -> List[dict]:
         return (
             self.trade_history[-n:]
             if len(self.trade_history) > n
             else self.trade_history
         )
 
-    def save(self, filename):
+    def save(self, filename) -> None:
         with open(filename, "wb") as f:
             dump(self, f)
-    
+
     @staticmethod
-    def load(filename):
+    def load(filename:str) -> 'ContinuousDoubleAuction':
         with open(filename, "rb") as f:
             return load(f)
