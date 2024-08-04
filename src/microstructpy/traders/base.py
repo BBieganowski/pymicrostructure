@@ -60,7 +60,7 @@ class Trader:
         self.filled_trades = []
         self.position = 0
         self.include_in_results = include_in_results
-
+        self.fair_price = market.initial_fair_price
         self.market.participants.append(self)
         self.trader_id = self.market.participants.index(self)
 
@@ -80,6 +80,7 @@ class Trader:
                 and np.sign(order.volume) == side
             ):
                 order.status = "canceled"
+                self.market.msg_history.append((self.trader_id, "CANCEL", order))
                 self.market.cancellations.append(order)
         self.market.drop_cancelled_orders()
 

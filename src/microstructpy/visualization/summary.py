@@ -2,7 +2,7 @@
 
 from microstructpy.markets.base import Market
 from microstructpy.traders.base import Trader
-from microstructpy.metrics.trader_metrics import (
+from microstructpy.metrics.trader import (
     position_history,
     profit_history,
 )
@@ -33,11 +33,17 @@ def participant_comparison(participants: List[Trader]):
         axs[0, i].plot(pos_ts, pos_hist)
         axs[0, i].set_title(f"{trader_type} {participant.trader_id} Position")
         axs[0, i].set_xlabel("Trade Number")
+        axs[0, i].set_ylim(min(pos_hist), max(pos_hist))
+        axs[0, i].set_xlim(0, len(pos_ts))
 
         axs[1, i].plot(pnl_ts, pnl_hist)
         axs[1, i].set_title(f"{trader_type} {participant.trader_id} Profit")
         axs[1, i].set_xlabel("Trade Number")
+        axs[1, i].set_ylim(min(pnl_hist), max(pnl_hist))
+        axs[1, i].set_xlim(0, len(pnl_ts))
 
+
+    plt.tight_layout()
     plt.show()
 
 

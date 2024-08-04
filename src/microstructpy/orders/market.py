@@ -32,4 +32,4 @@ class MarketOrder(Order):
 
     def __repr__(self) -> str:
         """Return a string representation of the order."""
-        return f"MKT V: {self.volume:+}."
+        return f"MKT V: {self.volume:+} FROM: {self.trader_id}"

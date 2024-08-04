@@ -22,6 +22,3 @@ def ensemble_traders(trader, params_dict):
         instance.include_in_results = False
         instances.append(instance)
     return instances
-
-
-# Template markets

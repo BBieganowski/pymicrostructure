@@ -6,6 +6,7 @@ import numpy as np
 from numpy.lib.stride_tricks import as_strided
 from scipy import stats
 from statsmodels.tsa.stattools import adfuller
+import seaborn as sns
 
 
 ################ LIQUIDITY METRICS ################
@@ -522,11 +523,11 @@ def order_book_depth(market: Market, window: int = 100) -> pd.DataFrame:
     """
     # Extract bid and ask depths from order book snapshots
     bid_depth = [
-        sum(order["volume"] for order in snapshot["bid"]) if snapshot["bid"] else None
+        sum(order["volume"] for order in snapshot["bid"]) if snapshot["bid"] else 0
         for snapshot in market.ob_snapshots
     ]
     ask_depth = [
-        sum(order["volume"] for order in snapshot["ask"]) if snapshot["ask"] else None
+        sum(order["volume"] for order in snapshot["ask"]) if snapshot["ask"] else 0
         for snapshot in market.ob_snapshots
     ]
     ob_time = [snapshot["time"] for snapshot in market.ob_snapshots]
@@ -538,6 +539,28 @@ def order_book_depth(market: Market, window: int = 100) -> pd.DataFrame:
 
     return df[["bid_depth", "ask_depth", "depth_difference"]]
 
+
+def order_book_heatmap(market: Market, frequency: int = 10) -> pd.DataFrame:
+    df = pd.DataFrame()
+    for i in market.ob_snapshots[::10]:
+        timestamp = i['time']
+        bid_prices = np.array([b['price'] for b in i['bid']])
+        bid_volumes = np.array([b['volume'] for b in i['bid']])
+        bid_volumes = np.cumsum(bid_volumes)
+
+        ask_prices = np.array([a['price'] for a in i['ask']])
+        ask_volumes = np.array([a['volume'] for a in i['ask']])
+        ask_volumes = np.cumsum(ask_volumes)
+
+        cols = np.append(bid_prices, ask_prices)
+        data = np.append(bid_volumes, ask_volumes)
+
+        df_slice = pd.DataFrame(index=[timestamp], columns=cols, data=[data])
+        df = pd.concat([df, df_slice])
+    df = df[df.columns.sort_values()]
+    bids = df[df>0].bfill(axis=1).fillna(0)
+    asks = df[df<0].ffill(axis=1).abs().fillna(0)
+    return (bids + asks).T[::-1]
 
 ################ PRICE DYNAMICS METRICS ####################
 
@@ -713,3 +736,29 @@ def roll_spread_estimator(
     df["roll_spread"] = mult * np.sqrt(-df["rolling_cov"].clip(upper=0))
 
     return df[["roll_spread"]]
+
+
+################ OTHER METRICS METRICS ################
+
+def news_goodness(market: Market, window: int = 20) -> pd.DataFrame:
+    """
+    Calculate the rolling window news goodness based on trade history.
+
+    The news goodness is the ratio of the number of trades with positive news to the total number of trades.
+
+    Parameters:
+    -----------
+    market : Market
+        An object representing the market, which must have a 'trade_history' attribute.
+        Each trade in the history should be a dictionary with 'price', 'time', and 'news' keys.
+    window : int, optional
+        The size of the rolling window. Default is 100.
+
+    Returns:
+    --------
+    pd.DataFrame
+        A DataFrame with a 'news_goodness' column, indexed by time.
+    """
+    # Convert trade history to DataFrame
+    news_history = pd.DataFrame(market.news_history)
+    return news_history

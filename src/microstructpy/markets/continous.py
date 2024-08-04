@@ -3,12 +3,13 @@
 from microstructpy.markets.base import Market
 from microstructpy.orders.market import MarketOrder
 from microstructpy.orders.base import Order
+from operator import itemgetter, attrgetter
 import random
 from typing import Union
 from tqdm import tqdm
+from dill import load, dump
 
-
-class ContinousOrderBookMarket(Market):
+class ContinousDoubleAuction(Market):
     """
     Represents a continuous order book market, extending the base Market class.
 
@@ -55,9 +56,9 @@ class ContinousOrderBookMarket(Market):
 
     """
 
-    def __init__(self):
+    def __init__(self, initial_fair_price: int = 100):
         """
-        Initialize a new ContinousOrderBookMarket instance.
+        Initialize a new ContinousDoubleAuction instance.
 
         Sets up empty order books, snapshots, midprices, and other tracking attributes.
         """
@@ -69,6 +70,12 @@ class ContinousOrderBookMarket(Market):
         self.cancellations = []
         self.duration = None
         self.current_tick = 0
+        self.initial_fair_price = initial_fair_price
+
+        self.news_arrival_rate = 0.1
+        self.good_news_prob = 0.5
+        self.news_history = [0]
+        self.msg_history = []
 
     def submit_order(self, orders: Union[Order, list[Order]]):
         """
@@ -86,16 +93,22 @@ class ContinousOrderBookMarket(Market):
             orders = [orders]
 
         self.last_submission_time += 1
+        
         for order in orders:
+            
             if isinstance(order, MarketOrder):
                 if order.volume > 0 and self.ask_ob == []:
+                    self.msg_history.append((self.last_submission_time, "REJECT", order))
+                    
                     order.status = "rejected"
                     break
                 elif order.volume < 0 and self.bid_ob == []:
+                    self.msg_history.append((self.last_submission_time, "REJECT", order))
                     order.status = "rejected"
                     break
 
             order.time = self.last_submission_time
+            self.msg_history.append((self.last_submission_time, "ADD", order))
 
             if order.volume > 0:
                 self.bid_ob.append(order)
@@ -141,12 +154,12 @@ class ContinousOrderBookMarket(Market):
             for price, volume in zip(bid_prices, bid_volumes)
         ]
         # sort
-        bid_ob_snapshot.sort(key=lambda x: x["price"], reverse=True)
+        bid_ob_snapshot.sort(key=itemgetter("price"), reverse=True)
         ask_ob_snapshot = [
             {"price": price, "volume": volume}
             for price, volume in zip(ask_prices, ask_volumes)
         ]
-        ask_ob_snapshot.sort(key=lambda x: x["price"])
+        ask_ob_snapshot.sort(key=itemgetter("price"))
         self.ob_snapshots.append(
             {
                 "bid": bid_ob_snapshot,
@@ -174,8 +187,8 @@ class ContinousOrderBookMarket(Market):
         This method sorts the order books, identifies matching orders, and executes
         trades when possible.
         """
-        self.bid_ob.sort(key=lambda x: x.price, reverse=True)
-        self.ask_ob.sort(key=lambda x: x.price)
+        self.bid_ob.sort(key=attrgetter("price"), reverse=True)
+        self.ask_ob.sort(key=attrgetter("price"))
         trade_counter = 0
         while (
             self.bid_ob and self.ask_ob and self.bid_ob[0].price >= self.ask_ob[0].price
@@ -205,7 +218,7 @@ class ContinousOrderBookMarket(Market):
             if ask_order.status == "filled":
                 self.ask_ob.pop(0)
             trade_counter += 1
-        
+
         # if market order remains in the order book, cancel rest
         for order in self.bid_ob + self.ask_ob:
             if isinstance(order, MarketOrder):
@@ -267,6 +280,7 @@ class ContinousOrderBookMarket(Market):
         seller_trade["volume"] = -volume
         seller.filled_trades.append(seller_trade)
 
+        self.msg_history.append((self.last_submission_time, "TRADE", f"{trade_info['volume']} @ {trade_info['price']}, AGG: {trade_info['agressor_side']}"))
         self.trade_history.append(trade_info)
 
     def update_order_status(self, order):
@@ -298,6 +312,13 @@ class ContinousOrderBookMarket(Market):
         self.duration = ticks
         for tick in tqdm(range(ticks)):
             self.current_tick = tick
+            
+            # News Arrival
+            if random.random() < self.news_arrival_rate:
+                self.news_history.append(1 if random.random() < self.good_news_prob else -1)
+            else:
+                self.news_history.append(0)
+            
             random.shuffle(self.participants)
             for participant in self.participants:
                 participant.update()
@@ -332,3 +353,12 @@ class ContinousOrderBookMarket(Market):
             if len(self.trade_history) > n
             else self.trade_history
         )
+
+    def save(self, filename):
+        with open(filename, "wb") as f:
+            dump(self, f)
+    
+    @staticmethod
+    def load(filename):
+        with open(filename, "rb") as f:
+            return load(f)

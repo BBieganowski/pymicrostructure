@@ -26,4 +26,4 @@ class LimitOrder(Order):
 
     def __repr__(self) -> str:
         """Return a string representation of the order."""
-        return f"LMT P: {self.price} V: {self.volume:+}."
+        return f"LMT P: {self.price} V: {self.volume:+}, FROM: {self.trader_id}"

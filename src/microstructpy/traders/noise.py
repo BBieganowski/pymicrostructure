@@ -149,10 +149,10 @@ class MeanReverter(NoiseTrader):
 
 class FatFinger(NoiseTrader):
     """
-    Noise trader that submits market orders at extreme prices.
+    Noise trader that submits market orders at exponential volumes.
 
     A fat-finger trader is a noise trader submits large orders on rare interval.
-    The price is determined by a random factor.
+    The volume is determined by a random factor.
 
     Attributes:
     -----------
