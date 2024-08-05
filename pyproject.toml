@@ -1,0 +1,28 @@
+# pyproject.toml
+
+
+[project]
+name = "pymicrostructure"
+version = "0.0.1"
+description = "Simulate financial markets"
+readme = "README.md"
+authors = [{ name = "Bartosz Bieganowski", email = "bartosz.bieganowski.office@gmail.com" }]
+license = { file = "LICENSE.md" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["finance", "quant", "trading"]
+dependencies = [
+    "feedparser >= 5.2.0",
+    "html2text",
+    'tomli; python_version >= "3.11"',
+]
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
+
+[project.urls]
+Homepage = "https://github.com/BBieganowski/pymicrostructure"

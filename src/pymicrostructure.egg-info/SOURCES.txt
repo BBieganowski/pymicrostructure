@@ -6,6 +6,7 @@ src/pymicrostructure/__init__.py
 src/pymicrostructure.egg-info/PKG-INFO
 src/pymicrostructure.egg-info/SOURCES.txt
 src/pymicrostructure.egg-info/dependency_links.txt
+src/pymicrostructure.egg-info/requires.txt
 src/pymicrostructure.egg-info/top_level.txt
 src/pymicrostructure/markets/__init__.py
 src/pymicrostructure/markets/base.py
