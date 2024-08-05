@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 PyMicrostructure documentation
-===========================
+==============================
 
 PyMicrostructure: A Flexible Market Microstructure Simulation Library
 
@@ -37,3 +37,6 @@ Note: This library is primarily intended for research and educational purposes. 
    getting_started
    user_guide
    pymicrostructure
+   faq
+   changelog
+   contributing

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pymicrostructure.metrics.market &mdash; PyMicrostructure 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            PyMicrostructure
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with PyMicrostructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing to pymicrostructure</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">PyMicrostructure</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pymicrostructure.metrics.market</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pymicrostructure.metrics.market</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Range of metrics to analyze market data.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pymicrostructure.markets.base</span> <span class="kn">import</span> <span class="n">Market</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.lib.stride_tricks</span> <span class="kn">import</span> <span class="n">as_strided</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="kn">import</span> <span class="n">adfuller</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+
+<span class="c1">################ LIQUIDITY METRICS ################</span>
+
+
+<div class="viewcode-block" id="quoted_spread">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.quoted_spread">[docs]</a>
+<span class="k">def</span> <span class="nf">quoted_spread</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the quoted spread of a market.</span>
+
+<span class="sd">    The quoted spread is the difference between the best bid and best ask prices.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have an &#39;ob_snapshots&#39; attribute.</span>
+<span class="sd">        Each snapshot should be a dictionary with &#39;bid&#39; and &#39;ask&#39; keys.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;quoted_spread&#39; column, indexed by snapshot times.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">best_bid</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span>
+    <span class="p">]</span>
+    <span class="n">best_ask</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span>
+    <span class="p">]</span>
+    <span class="n">ob_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span><span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;best_bid&quot;</span><span class="p">:</span> <span class="n">best_bid</span><span class="p">,</span> <span class="s2">&quot;best_ask&quot;</span><span class="p">:</span> <span class="n">best_ask</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">ob_time</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;quoted_spread&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;best_ask&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;best_bid&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;quoted_spread&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="effective_spread">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.effective_spread">[docs]</a>
+<span class="k">def</span> <span class="nf">effective_spread</span><span class="p">(</span>
+    <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the effective spread of a market for a given order size.</span>
+
+<span class="sd">    The effective spread is the difference between the execution price of a market order</span>
+<span class="sd">    and the midpoint price, multiplied by 2 to account for round-trip costs.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have an &#39;ob_snapshots&#39; attribute.</span>
+<span class="sd">        Each snapshot should be a dictionary with &#39;bid&#39; and &#39;ask&#39; keys, containing lists</span>
+<span class="sd">        of price-volume pairs.</span>
+<span class="sd">    volume : float</span>
+<span class="sd">        The size of the market order to simulate.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with &#39;effective_spread_buy&#39; and &#39;effective_spread_sell&#39; columns,</span>
+<span class="sd">        indexed by snapshot times.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">volume</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Volume must be positive.&quot;</span>
+
+    <span class="k">def</span> <span class="nf">calculate_execution_price</span><span class="p">(</span><span class="n">orders</span><span class="p">,</span> <span class="n">volume</span><span class="p">):</span>
+        <span class="n">remaining_volume</span> <span class="o">=</span> <span class="n">volume</span>
+        <span class="n">execution_price</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">orders</span><span class="p">:</span>
+            <span class="n">price</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">order</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">remaining_volume</span> <span class="o">&lt;=</span> <span class="n">size</span><span class="p">:</span>
+                <span class="n">execution_price</span> <span class="o">+=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">remaining_volume</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">execution_price</span> <span class="o">+=</span> <span class="n">price</span> <span class="o">*</span> <span class="n">size</span>
+                <span class="n">remaining_volume</span> <span class="o">-=</span> <span class="n">size</span>
+        <span class="k">return</span> <span class="n">execution_price</span> <span class="o">/</span> <span class="n">volume</span> <span class="k">if</span> <span class="n">volume</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="n">effective_spreads</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ob_times</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span><span class="p">:</span>
+        <span class="n">bid_orders</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">]</span>
+        <span class="n">ask_orders</span> <span class="o">=</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">bid_orders</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">ask_orders</span><span class="p">:</span>
+            <span class="n">effective_spreads</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mid_price</span> <span class="o">=</span> <span class="p">(</span><span class="n">bid_orders</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">ask_orders</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="n">buy_execution_price</span> <span class="o">=</span> <span class="n">calculate_execution_price</span><span class="p">(</span><span class="n">ask_orders</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+            <span class="n">sell_execution_price</span> <span class="o">=</span> <span class="n">calculate_execution_price</span><span class="p">(</span><span class="n">bid_orders</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">buy_execution_price</span> <span class="ow">and</span> <span class="n">sell_execution_price</span><span class="p">:</span>
+                <span class="n">effective_spread_buy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">((</span><span class="n">buy_execution_price</span> <span class="o">-</span> <span class="n">mid_price</span><span class="p">))</span>
+                <span class="n">effective_spread_sell</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">((</span><span class="n">mid_price</span> <span class="o">-</span> <span class="n">sell_execution_price</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">relative</span><span class="p">:</span>
+                    <span class="n">effective_spread_buy</span> <span class="o">/=</span> <span class="n">mid_price</span>
+                    <span class="n">effective_spread_sell</span> <span class="o">/=</span> <span class="n">mid_price</span>
+                <span class="n">effective_spreads</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">effective_spread_buy</span><span class="p">,</span> <span class="n">effective_spread_sell</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">effective_spreads</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+
+        <span class="n">ob_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">])</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">effective_spreads</span><span class="p">,</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+            <span class="sa">f</span><span class="s2">&quot;effective_spread_buy_v_</span><span class="si">{</span><span class="n">volume</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;effective_spread_sell_v_</span><span class="si">{</span><span class="n">volume</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">ob_times</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+
+<div class="viewcode-block" id="amihud_illiquidity">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.amihud_illiquidity">[docs]</a>
+<span class="k">def</span> <span class="nf">amihud_illiquidity</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window Amihud illiquidity measure (lambda) based on trade history.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39;, &#39;volume&#39;, and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window (in number of periods). Default is 20.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with an &#39;amihud_lambda&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate returns</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+
+    <span class="c1"># Calculate dollar volume</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;dollar_volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span>
+
+    <span class="k">assert</span> <span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;dollar_volume&quot;</span><span class="p">],</span> <span class="s2">&quot;Dollar volume cannot be zero.&quot;</span>
+
+    <span class="c1"># Calculate Amihud measure</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;daily_amihud&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;dollar_volume&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Calculate rolling window Amihud lambda</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;amihud_lambda&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;daily_amihud&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;amihud_lambda&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="kyle_lambda">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.kyle_lambda">[docs]</a>
+<span class="k">def</span> <span class="nf">kyle_lambda</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window Kyle&#39;s Lambda based on trade history.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39;, &#39;volume&#39;, &#39;agressor_side&#39;, and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window (in number of periods). Default is 20.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;kyle_lambda&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate price changes</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price_change&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+    <span class="c1"># Calculate signed volume (order flow)</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;signed_volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;agressor_side&quot;</span><span class="p">]</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">rolling_regression</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="n">slope</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="n">window</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="n">slope</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">window</span> <span class="p">:</span> <span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">window</span> <span class="p">:</span> <span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">slope</span>
+
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;kyle_lambda&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rolling_regression</span><span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price_change&quot;</span><span class="p">],</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;signed_volume&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Function to calculate Kyle&#39;s Lambda for a window</span>
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;kyle_lambda&quot;</span><span class="p">]]</span></div>
+
+
+
+<span class="c1">################ INEFFICIENCY METRICS ##################</span>
+
+
+<div class="viewcode-block" id="returns_autocorrelation">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.returns_autocorrelation">[docs]</a>
+<span class="k">def</span> <span class="nf">returns_autocorrelation</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window auto-correlation of returns based on trade history.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39;, &#39;time&#39;, and &#39;agressor_side&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window (in number of periods). Default is 20.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;returns_autocorr&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate returns</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span>
+
+    <span class="c1"># Calculate rolling window auto-correlation</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;returns_autocorr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;return&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;returns_autocorr&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="variance_ratio_test">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.variance_ratio_test">[docs]</a>
+<span class="k">def</span> <span class="nf">variance_ratio_test</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a rolling Variance Ratio test on price series.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    k : int, optional</span>
+<span class="sd">        The number of periods to use for the k-period return. Default is 5.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with &#39;vr_statistic&#39; and &#39;p_value&#39; columns, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate log returns</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;log_return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">calculate_vr</span><span class="p">(</span><span class="n">returns</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">window</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;vr_statistic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">})</span>
+
+        <span class="c1"># Calculate 1-period and k-period variances</span>
+        <span class="n">var_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+        <span class="n">var_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">returns</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">/</span> <span class="n">k</span>
+
+        <span class="c1"># Calculate Variance Ratio</span>
+        <span class="n">vr</span> <span class="o">=</span> <span class="n">var_k</span> <span class="o">/</span> <span class="n">var_1</span>
+
+        <span class="c1"># Calculate test statistic</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">m</span><span class="p">)</span>
+        <span class="n">vr_statistic</span> <span class="o">=</span> <span class="p">(</span><span class="n">vr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">vr_statistic</span>
+
+    <span class="c1"># Perform rolling Variance Ratio test</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;vr_statistic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;log_return&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">calculate_vr</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;vr_statistic&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="hurst_exponent">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.hurst_exponent">[docs]</a>
+<span class="k">def</span> <span class="nf">hurst_exponent</span><span class="p">(</span>
+    <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling Hurst exponent for a price series.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+<span class="sd">    max_lag : int, optional</span>
+<span class="sd">        The maximum lag to consider in the R/S calculation. Default is 20.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;hurst_exponent&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate log returns</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;log_return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">calculate_hurst</span><span class="p">(</span><span class="n">returns</span><span class="p">):</span>
+        <span class="n">returns</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># Convert to numpy array and drop NaNs</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">returns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">window</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="c1"># Calculate the array of the variances of the lagged differences</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">lag</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">lag</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">)]</span>
+
+        <span class="c1"># Calculate the cumulative sum of log returns</span>
+        <span class="n">cum_sum</span> <span class="o">=</span> <span class="n">returns</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">r_s</span><span class="p">(</span><span class="n">lag</span><span class="p">):</span>
+            <span class="c1"># Use list comprehension instead of stride tricks</span>
+            <span class="n">series</span> <span class="o">=</span> <span class="p">[</span><span class="n">cum_sum</span><span class="p">[</span><span class="n">lag</span><span class="p">:]</span> <span class="o">-</span> <span class="n">cum_sum</span><span class="p">[:</span><span class="o">-</span><span class="n">lag</span><span class="p">]]</span>
+
+            <span class="c1"># Calculate the R/S statistic</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">series</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">series</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">series</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">r</span> <span class="o">/</span> <span class="n">s</span> <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">r_s_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">r_s</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">)]</span>
+
+        <span class="c1"># Calculate the Hurst exponent</span>
+        <span class="n">hurst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">r_s_values</span><span class="p">),</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">hurst</span>
+
+    <span class="c1"># Calculate rolling Hurst exponent</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;hurst_exponent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;log_return&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">calculate_hurst</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;hurst_exponent&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="rolling_adf_test">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.rolling_adf_test">[docs]</a>
+<span class="k">def</span> <span class="nf">rolling_adf_test</span><span class="p">(</span>
+    <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a rolling Augmented Dickey-Fuller test on price series.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+<span class="sd">    alpha : float, optional</span>
+<span class="sd">        The significance level for the test. Default is 0.05.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with &#39;adf_statistic&#39;, &#39;p_value&#39;, and &#39;is_stationary&#39; columns, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">perform_adf_test</span><span class="p">(</span><span class="n">prices</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">window</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">&quot;adf_statistic&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="s2">&quot;is_stationary&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">prices</span><span class="p">,</span> <span class="n">autolag</span><span class="o">=</span><span class="s2">&quot;AIC&quot;</span><span class="p">)</span>
+        <span class="n">adf_statistic</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">adf_statistic</span>
+
+    <span class="c1"># Perform rolling ADF test</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;adf_statistic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">perform_adf_test</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;adf_statistic&quot;</span><span class="p">]]</span></div>
+
+
+
+<span class="c1">################ ORDER FLOW METRICS ####################</span>
+
+
+<div class="viewcode-block" id="rolling_cancellation_rate">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.rolling_cancellation_rate">[docs]</a>
+<span class="k">def</span> <span class="nf">rolling_cancellation_rate</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window cancellation rate based on order history.</span>
+
+<span class="sd">    The cancellation rate is the number of canceled orders divided by the total number of orders.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;cancellations&#39; and &#39;order_history&#39; attribute.</span>
+<span class="sd">        Each order in the history should be a dictionary with &#39;status&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;cancellation_rate&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert order history to DataFrame</span>
+    <span class="n">cancellations</span> <span class="o">=</span> <span class="n">market</span><span class="o">.</span><span class="n">cancellations</span>
+    <span class="n">cancellations</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">volume</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">time</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cancellations</span><span class="p">]</span>
+    <span class="n">cancellations_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cancellations</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">,</span> <span class="s2">&quot;time&quot;</span><span class="p">])</span>
+    <span class="n">cancellations_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># aggregate on time</span>
+    <span class="n">cancellations_df</span> <span class="o">=</span> <span class="n">cancellations_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">cancellations_df</span></div>
+
+
+
+<div class="viewcode-block" id="order_flow_imbalance">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.order_flow_imbalance">[docs]</a>
+<span class="k">def</span> <span class="nf">order_flow_imbalance</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window order flow imbalance based on trade history.</span>
+
+<span class="sd">    The order flow imbalance is the ratio of buy volume to total volume.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;volume&#39; and &#39;agressor_side&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with an &#39;order_flow_imbalance&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate order flow imbalance</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;order_flow_imbalance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;agressor_side&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Calculate rolling window order flow imbalance</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;order_flow_imbalance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;order_flow_imbalance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;order_flow_imbalance&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="trade_sign_autocorrelation">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.trade_sign_autocorrelation">[docs]</a>
+<span class="k">def</span> <span class="nf">trade_sign_autocorrelation</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window auto-correlation of trade signs based on trade history.</span>
+
+<span class="sd">    The trade sign is the sign of the trade price change.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39;, &#39;time&#39;, and &#39;agressor_side&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;trade_sign_autocorr&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate trade signs</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;trade_sign&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;agressor_side&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Calculate rolling window auto-correlation</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;trade_sign_autocorr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;trade_sign&quot;</span><span class="p">]</span>
+        <span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;trade_sign&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;trade_sign_autocorr&quot;</span><span class="p">]]</span></div>
+
+
+
+<span class="c1">################ ORDER BOOK METRICS ####################</span>
+
+
+<div class="viewcode-block" id="order_book_depth">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.order_book_depth">[docs]</a>
+<span class="k">def</span> <span class="nf">order_book_depth</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window order book depth based on order book snapshots.</span>
+
+<span class="sd">    The order book depth is the total volume at the best bid and best ask prices.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have an &#39;ob_snapshots&#39; attribute.</span>
+<span class="sd">        Each snapshot should be a dictionary with &#39;bid&#39; and &#39;ask&#39; keys, containing lists</span>
+<span class="sd">        of price-volume pairs.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with &#39;bid_depth&#39; and &#39;ask_depth&#39; columns, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract bid and ask depths from order book snapshots</span>
+    <span class="n">bid_depth</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nb">sum</span><span class="p">(</span><span class="n">order</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span>
+    <span class="p">]</span>
+    <span class="n">ask_depth</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="nb">sum</span><span class="p">(</span><span class="n">order</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">order</span> <span class="ow">in</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">])</span> <span class="k">if</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span>
+    <span class="p">]</span>
+    <span class="n">ob_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span><span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;bid_depth&quot;</span><span class="p">:</span> <span class="n">bid_depth</span><span class="p">,</span> <span class="s2">&quot;ask_depth&quot;</span><span class="p">:</span> <span class="n">ask_depth</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="n">ob_time</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bid_depth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bid_depth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ask_depth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ask_depth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;depth_difference&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ask_depth&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;bid_depth&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;bid_depth&quot;</span><span class="p">,</span> <span class="s2">&quot;ask_depth&quot;</span><span class="p">,</span> <span class="s2">&quot;depth_difference&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="order_book_heatmap">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.order_book_heatmap">[docs]</a>
+<span class="k">def</span> <span class="nf">order_book_heatmap</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a heatmap of order book volumes over time.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have an &#39;ob_snapshots&#39; attribute.</span>
+<span class="sd">        Each snapshot should be a dictionary with &#39;bid&#39; and &#39;ask&#39; keys, containing lists</span>
+<span class="sd">        of price-volume pairs.</span>
+<span class="sd">    frequency : int, optional</span>
+<span class="sd">        The frequency of snapshots to include in the heatmap. Default is 10.</span>
+<span class="sd">        This parameter can be used to reduce the computation time of the heatmap.</span>
+<span class="sd">        At a cost of less resolution.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with order book volumes indexed by time and price level.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span><span class="p">[::</span><span class="mi">10</span><span class="p">]:</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+        <span class="n">bid_prices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">]])</span>
+        <span class="n">bid_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">]])</span>
+        <span class="n">bid_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">bid_volumes</span><span class="p">)</span>
+
+        <span class="n">ask_prices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">]])</span>
+        <span class="n">ask_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">]])</span>
+        <span class="n">ask_volumes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ask_volumes</span><span class="p">)</span>
+
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bid_prices</span><span class="p">,</span> <span class="n">ask_prices</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bid_volumes</span><span class="p">,</span> <span class="n">ask_volumes</span><span class="p">)</span>
+
+        <span class="n">df_slice</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">timestamp</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">cols</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">data</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df_slice</span><span class="p">])</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()]</span>
+    <span class="n">bids</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bfill</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">asks</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ffill</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">bids</span> <span class="o">+</span> <span class="n">asks</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+
+<span class="c1">################ PRICE DYNAMICS METRICS ####################</span>
+
+
+<div class="viewcode-block" id="vwap">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.vwap">[docs]</a>
+<span class="k">def</span> <span class="nf">vwap</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window volume-weighted average price (VWAP) based on trade history.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39;, &#39;volume&#39;, and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;vwap&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate VWAP</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;dollar_volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;cumulative_dollar_volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;dollar_volume&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;cumulative_volume&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;vwap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;cumulative_dollar_volume&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;cumulative_volume&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;vwap&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="trade_midprice_deviation">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.trade_midprice_deviation">[docs]</a>
+<span class="k">def</span> <span class="nf">trade_midprice_deviation</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window deviation of trade prices from the midprice based on trade history.</span>
+
+<span class="sd">    The midprice is the average of the best bid and best ask prices.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have an &#39;ob_snapshots&#39; and &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each snapshot should be a dictionary with &#39;bid&#39; and &#39;ask&#39; keys, containing lists of price-volume pairs.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;trade_midprice_deviation&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract midprices from order book snapshots</span>
+    <span class="n">midprices</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="p">(</span><span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;price&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;bid&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;ask&quot;</span><span class="p">]</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span>
+    <span class="p">]</span>
+    <span class="n">ob_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">snapshot</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">ob_snapshots</span><span class="p">]</span>
+
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">ob_midprices</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">midprices</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">ob_time</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;midprice&quot;</span><span class="p">])</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">trades_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ob_midprices</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">)</span>
+    <span class="n">summary</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Calculate deviation from midprice</span>
+    <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;trade_midprice_deviation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">summary</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;midprice&quot;</span><span class="p">])</span>
+    <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;trade_midprice_deviation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">summary</span><span class="p">[</span><span class="s2">&quot;trade_midprice_deviation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">summary</span><span class="p">[[</span><span class="s2">&quot;trade_midprice_deviation&quot;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="realized_volatility">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.realized_volatility">[docs]</a>
+<span class="k">def</span> <span class="nf">realized_volatility</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window realized volatility based on trade history.</span>
+
+<span class="sd">    Realized volatility is the standard deviation of price returns over a given window.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;realized_volatility&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">trades_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">trade_history</span><span class="p">)</span>
+    <span class="n">trades_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Calculate log returns</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;log_return&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+    <span class="c1"># Calculate rolling window realized volatility</span>
+    <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;realized_volatility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">trades_df</span><span class="p">[</span><span class="s2">&quot;log_return&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">trades_df</span><span class="p">[[</span><span class="s2">&quot;realized_volatility&quot;</span><span class="p">]]</span></div>
+
+
+
+<span class="c1">################ MICROSTRUCTURE METRICS ################</span>
+
+
+<div class="viewcode-block" id="roll_spread_estimator">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.roll_spread_estimator">[docs]</a>
+<span class="k">def</span> <span class="nf">roll_spread_estimator</span><span class="p">(</span>
+    <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimate the rolling spread of a market based on its trade history.</span>
+
+<span class="sd">    This function calculates the rolling spread using a covariance-based method</span>
+<span class="sd">    on the price changes over a specified window size.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39; and &#39;time&#39; keys.</span>
+<span class="sd">    window_size : int, optional (default=100)</span>
+<span class="sd">        The size of the rolling window for spread estimation.</span>
+<span class="sd">    relative : bool, optional (default=False)</span>
+<span class="sd">        If True, calculate relative price changes instead of absolute changes.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;roll_spread&#39; column, indexed by trade times.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">    ------</span>
+<span class="sd">    The roll spread is estimated as:</span>
+<span class="sd">    roll_spread = mult * sqrt(-cov(delta_price_t, delta_price_t-1))</span>
+<span class="sd">    where mult is 200 for relative changes and 2 for absolute changes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">trade_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="n">trade</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">],</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">trade</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]}</span>
+        <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">market</span><span class="o">.</span><span class="n">trade_history</span>
+    <span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">trade_data</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">relative</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price_delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price_delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price_delta_l1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price_delta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;rolling_cov&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;price_delta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window_size</span><span class="p">)</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;price_delta_l1&quot;</span><span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="n">mult</span> <span class="o">=</span> <span class="mi">200</span> <span class="k">if</span> <span class="n">relative</span> <span class="k">else</span> <span class="mi">2</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;roll_spread&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mult</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;rolling_cov&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">upper</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;roll_spread&quot;</span><span class="p">]]</span></div>
+
+
+
+<span class="c1">################ OTHER METRICS METRICS ################</span>
+
+
+<div class="viewcode-block" id="news_goodness">
+<a class="viewcode-back" href="../../../microstructpy.metrics.html#pymicrostructure.metrics.market.news_goodness">[docs]</a>
+<span class="k">def</span> <span class="nf">news_goodness</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the rolling window news goodness based on trade history.</span>
+
+<span class="sd">    The news goodness is the ratio of the number of trades with positive news to the total number of trades.</span>
+
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    market : Market</span>
+<span class="sd">        An object representing the market, which must have a &#39;trade_history&#39; attribute.</span>
+<span class="sd">        Each trade in the history should be a dictionary with &#39;price&#39;, &#39;time&#39;, and &#39;news&#39; keys.</span>
+<span class="sd">    window : int, optional</span>
+<span class="sd">        The size of the rolling window. Default is 100.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        A DataFrame with a &#39;news_goodness&#39; column, indexed by time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Convert trade history to DataFrame</span>
+    <span class="n">news_history</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">news_history</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">news_history</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bartosz Bieganowski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

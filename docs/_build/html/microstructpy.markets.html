@@ -20,9 +20,7 @@
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Orders" href="pymicrostructure.orders.html" />
-    <link rel="prev" title="API Reference" href="pymicrostructure.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,27 +43,12 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started with PyMicrostructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="pymicrostructure.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Markets package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-pymicrostructure.markets.base">Base Market</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pymicrostructure.markets.base.Market"><code class="docutils literal notranslate"><span class="pre">Market</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pymicrostructure.markets.continuous">Continuous Markets</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pymicrostructure.markets.continuous.ContinuousDoubleAuction"><code class="docutils literal notranslate"><span class="pre">ContinuousDoubleAuction</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="pymicrostructure.orders.html">Orders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pymicrostructure.traders.html">Traders</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pymicrostructure.metrics.html">Metrics package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pymicrostructure.visualization.html">Vizualization</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to pymicrostructure</a></li>
 </ul>
 
         </div>
@@ -82,10 +65,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="pymicrostructure.html">API Reference</a></li>
       <li class="breadcrumb-item active">Markets package</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/pymicrostructure.markets.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/microstructpy.markets.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -221,7 +203,7 @@ and execution.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pymicrostructure.markets.continuous.ContinuousDoubleAuction.execute_trade">
-<span class="sig-name descname"><span class="pre">execute_trade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buyer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pymicrostructure.traders.html#pymicrostructure.traders.base.Trader" title="pymicrostructure.traders.base.Trader"><span class="pre">Trader</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">seller</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pymicrostructure.traders.html#pymicrostructure.traders.base.Trader" title="pymicrostructure.traders.base.Trader"><span class="pre">Trader</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agressor_side</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pymicrostructure/markets/continuous.html#ContinuousDoubleAuction.execute_trade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymicrostructure.markets.continuous.ContinuousDoubleAuction.execute_trade" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute_trade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buyer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#pymicrostructure.traders.base.Trader" title="pymicrostructure.traders.base.Trader"><span class="pre">Trader</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">seller</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="microstructpy.traders.html#pymicrostructure.traders.base.Trader" title="pymicrostructure.traders.base.Trader"><span class="pre">Trader</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agressor_side</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pymicrostructure/markets/continuous.html#ContinuousDoubleAuction.execute_trade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymicrostructure.markets.continuous.ContinuousDoubleAuction.execute_trade" title="Link to this definition"></a></dt>
 <dd><p>Execute a trade between two participants.</p>
 <p>This method updates participant positions, records trade information,
 and adds the trade to the market’s trade history.</p>
@@ -355,10 +337,7 @@ updates order statuses, and triggers order matching.</p>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pymicrostructure.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pymicrostructure.orders.html" class="btn btn-neutral float-right" title="Orders" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 
