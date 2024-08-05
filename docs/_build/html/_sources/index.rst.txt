@@ -1,0 +1,39 @@
+.. MicrostructPy documentation master file, created by
+   sphinx-quickstart on Mon Aug  5 13:24:33 2024.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+MicrostructPy documentation
+===========================
+
+MicrostructPy: A Flexible Market Microstructure Simulation Library
+
+MicrostructPy is a powerful and flexible Python library designed for simulating and analyzing financial market microstructure. It provides a comprehensive set of tools for creating realistic market environments, implementing various types of traders, and analyzing market dynamics and trader performance.
+
+Key features of MicrostructPy include:
+
+1. Market Simulation: Implement different market types, including continuous double auctions, with customizable parameters.
+
+2. Trader Models: Create diverse trader types, from simple noise traders to sophisticated market makers and informed traders, with customizable strategies.
+
+3. Order Management: Support for various order types, including limit orders and market orders, with flexible order book management.
+
+4. Performance Metrics: Comprehensive set of market and trader performance metrics, covering liquidity, efficiency, and individual trader statistics.
+
+5. Customizable Strategies: Implement and easily swap different trading strategies using a flexible policy system for fair price determination, spread setting, and volume decisions.
+
+6. Data Analysis Tools: Built-in functions for calculating key market microstructure measures depth, order flow, and liquidity.
+
+7. Visualization Aids: Tools to help visualize order book dynamics, price movements, and trader performance.
+
+MicrostructPy is designed to be highly modular and extensible, allowing researchers and practitioners to easily implement and test new trading strategies, market mechanisms, and analysis techniques. Whether you're studying market impact, developing trading algorithms, or exploring market dynamics, MicrostructPy provides the building blocks for sophisticated financial market simulations.
+
+Note: This library is primarily intended for research and educational purposes. While it aims to provide realistic simulations, it should not be used for actual trading without extensive additional development and real-world validation.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Links:
+
+   getting_started
+   user_guide
+   microstructpy

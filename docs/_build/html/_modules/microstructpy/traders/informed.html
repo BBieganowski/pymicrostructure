@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>microstructpy.traders.informed &mdash; MicrostructPy 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            MicrostructPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with MicrostructPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../microstructpy.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">MicrostructPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">microstructpy.traders.informed</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for microstructpy.traders.informed</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Informed traders that have an opinion on the future price of a security.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">microstructpy.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
+<span class="kn">from</span> <span class="nn">microstructpy.orders.market</span> <span class="kn">import</span> <span class="n">MarketOrder</span>
+<span class="kn">from</span> <span class="nn">microstructpy.orders.limit</span> <span class="kn">import</span> <span class="n">LimitOrder</span>
+<span class="kn">from</span> <span class="nn">microstructpy.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">microstructpy.traders.strategy</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="BaseInformedTrader">
+<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.informed.BaseInformedTrader">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseInformedTrader</span><span class="p">(</span><span class="n">Trader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A base class for informed traders who have an opinion on the future price of a security.</span>
+
+<span class="sd">    This trader uses strategies to determine fair price and trading volume, and</span>
+<span class="sd">    places market orders based on these strategies and current market conditions.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        fair_price_strategy (Callable): A strategy to determine the fair price.</span>
+<span class="sd">        volume_strategy (Callable): A strategy to determine the trading volume.</span>
+<span class="sd">        max_inventory (int): The maximum inventory the trader can hold.</span>
+<span class="sd">        fair_price (float): The current fair price as determined by the strategy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">market</span><span class="p">:</span> <span class="n">ContinuousDoubleAuction</span><span class="p">,</span>
+        <span class="n">fair_price_strategy</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">volume_strategy</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">max_inventory</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">include_in_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the BaseInformedTrader.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            market (ContinuousDoubleAuction): The market in which the trader operates.</span>
+<span class="sd">            fair_price_strategy (Callable): A strategy to determine the fair price.</span>
+<span class="sd">            volume_strategy (Callable): A strategy to determine the trading volume.</span>
+<span class="sd">            max_inventory (int, optional): The maximum inventory the trader can hold. Defaults to 1000.</span>
+<span class="sd">            name (str, optional): The name of the trader. Defaults to None.</span>
+<span class="sd">            include_in_results (bool, optional): Whether to include this trader in results. Defaults to True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">market</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">include_in_results</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fair_price_strategy</span> <span class="o">=</span> <span class="n">fair_price_strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">volume_strategy</span> <span class="o">=</span> <span class="n">volume_strategy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_inventory</span> <span class="o">=</span> <span class="n">max_inventory</span>
+
+<div class="viewcode-block" id="BaseInformedTrader.update">
+<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.informed.BaseInformedTrader.update">[docs]</a>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the trader&#39;s state and potentially place orders.</span>
+
+<span class="sd">        This method updates the fair price, calculates the trading volume,</span>
+<span class="sd">        and places market orders if the current market price is favorable</span>
+<span class="sd">        compared to the fair price.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fair_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fair_price_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume_strategy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">market</span><span class="o">.</span><span class="n">best_bid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">market</span><span class="o">.</span><span class="n">best_bid</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">fair_price</span> <span class="ow">and</span> <span class="n">volume</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cancel_all_orders</span><span class="p">()</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">MarketOrder</span><span class="p">(</span>
+                    <span class="n">trader_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trader_id</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">market</span><span class="o">.</span><span class="n">submit_order</span><span class="p">(</span><span class="n">order</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">market</span><span class="o">.</span><span class="n">best_ask</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">market</span><span class="o">.</span><span class="n">best_ask</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">fair_price</span> <span class="ow">and</span> <span class="n">volume</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cancel_all_orders</span><span class="p">()</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="n">MarketOrder</span><span class="p">(</span>
+                    <span class="n">trader_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">trader_id</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">market</span><span class="o">.</span><span class="n">submit_order</span><span class="p">(</span><span class="n">order</span><span class="p">)</span></div>
+</div>
+
+
+    
+<span class="c1"># Predefined templates</span>
+
+<div class="viewcode-block" id="DummyInformedTrader">
+<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.informed.DummyInformedTrader">[docs]</a>
+<span class="k">class</span> <span class="nc">DummyInformedTrader</span><span class="p">(</span><span class="n">BaseInformedTrader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A dummy informed trader with constant fair price and maximum allowed volume.</span>
+
+<span class="sd">    This trader uses a constant fair price of 1050 and always trades the maximum allowed volume.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">market</span><span class="p">:</span> <span class="n">ContinuousDoubleAuction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the DummyInformedTrader with predefined strategies.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">market</span><span class="o">=</span><span class="n">market</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Dummy Informed Trader&quot;</span><span class="p">,</span>
+            <span class="n">fair_price_strategy</span><span class="o">=</span><span class="n">ConstantFairPrice</span><span class="p">(</span><span class="mi">1050</span><span class="p">),</span>
+            <span class="n">volume_strategy</span><span class="o">=</span><span class="n">MaxAllowedVolume</span><span class="p">(),</span>
+            <span class="n">max_inventory</span><span class="o">=</span><span class="mi">1000</span>
+        <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="TWAPInformedTrader">
+<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.informed.TWAPInformedTrader">[docs]</a>
+<span class="k">class</span> <span class="nc">TWAPInformedTrader</span><span class="p">(</span><span class="n">BaseInformedTrader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Time-Weighted Average Price (TWAP) informed trader.</span>
+
+<span class="sd">    This trader uses a constant fair price of 1050 and a time-weighted volume strategy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">market</span><span class="p">:</span> <span class="n">ContinuousDoubleAuction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the TWAPInformedTrader with predefined strategies.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">market</span><span class="o">=</span><span class="n">market</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;TWAP Informed Trader&quot;</span><span class="p">,</span>
+            <span class="n">fair_price_strategy</span><span class="o">=</span><span class="n">ConstantFairPrice</span><span class="p">(</span><span class="mi">1050</span><span class="p">),</span>
+            <span class="n">volume_strategy</span><span class="o">=</span><span class="n">TimeWeightedVolume</span><span class="p">(),</span>
+            <span class="n">max_inventory</span><span class="o">=</span><span class="mi">1000</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NewsInformedTrader">
+<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.informed.NewsInformedTrader">[docs]</a>
+<span class="k">class</span> <span class="nc">NewsInformedTrader</span><span class="p">(</span><span class="n">BaseInformedTrader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A news-informed trader that reacts to market news.</span>
+
+<span class="sd">    This trader uses a news impact exponential fair price strategy and a time-weighted volume strategy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">market</span><span class="p">:</span> <span class="n">ContinuousDoubleAuction</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the NewsInformedTrader with predefined strategies.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">market</span><span class="o">=</span><span class="n">market</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;News Informed Trader&quot;</span><span class="p">,</span>
+            <span class="n">fair_price_strategy</span><span class="o">=</span><span class="n">NewsImpactExponentialFairPrice</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+            <span class="n">volume_strategy</span><span class="o">=</span><span class="n">TimeWeightedVolume</span><span class="p">(),</span>
+            <span class="n">max_inventory</span><span class="o">=</span><span class="mi">1000</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bartosz Bieganowski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -56,4 +56,3 @@ class NoiseTrader(Trader):
                 volume=volume * random.choice([-1, 1]),
             )
             self.market.submit_order(order)
-

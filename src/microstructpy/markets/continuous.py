@@ -121,7 +121,11 @@ class ContinuousDoubleAuction(Market):
                 self.ask_ob.append(order)
             order.status = "active"
             try:
-                submitting_trader = next(participant for participant in self.participants if participant.trader_id == order.trader_id)
+                submitting_trader = next(
+                    participant
+                    for participant in self.participants
+                    if participant.trader_id == order.trader_id
+                )
                 submitting_trader.orders.append(order)
             except StopIteration:
                 raise ValueError(f"No trader found with ID {order.trader_id}")
@@ -244,12 +248,19 @@ class ContinuousDoubleAuction(Market):
         Participant
             The participant object with the matching trader ID.
         """
-        try: 
+        try:
             return next(p for p in self.participants if p.trader_id == trader_id)
         except StopIteration:
             raise ValueError(f"No trader found with ID {trader_id}")
 
-    def execute_trade(self, buyer: Trader, seller: Trader, price: float, volume: Union[int, float], agressor_side: int) -> None:
+    def execute_trade(
+        self,
+        buyer: Trader,
+        seller: Trader,
+        price: float,
+        volume: Union[int, float],
+        agressor_side: int,
+    ) -> None:
         """
         Execute a trade between two participants.
 
@@ -310,7 +321,7 @@ class ContinuousDoubleAuction(Market):
         else:
             order.status = "partial"
 
-    def run(self, ticks:int=10):
+    def run(self, ticks: int = 10):
         """
         Run the market simulation for a specified number of ticks.
 
@@ -362,7 +373,7 @@ class ContinuousDoubleAuction(Market):
             else None
         )
 
-    def get_recent_trades(self, n:int=10) -> List[dict]:
+    def get_recent_trades(self, n: int = 10) -> List[dict]:
         return (
             self.trade_history[-n:]
             if len(self.trade_history) > n
@@ -374,6 +385,6 @@ class ContinuousDoubleAuction(Market):
             dump(self, f)
 
     @staticmethod
-    def load(filename:str) -> 'ContinuousDoubleAuction':
+    def load(filename: str) -> "ContinuousDoubleAuction":
         with open(filename, "rb") as f:
             return load(f)

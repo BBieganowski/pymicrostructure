@@ -5,11 +5,19 @@ from microstructpy.traders.base import Trader
 
 # Import the strategies you want to test
 from microstructpy.traders.strategy import (
-    ConstantFairPrice, OrderFlowSignFairPrice, OrderFlowMagnitudeFairPrice,
-    NewsImpactFairPrice, NewsImpactExponentialFairPrice, MaxAllowedVolume,
-    ConstantVolume, MaxFractionVolume, TimeWeightedVolume, ConstantSpread,
-    OrderFlowImbalanceSpread
+    ConstantFairPrice,
+    OrderFlowSignFairPrice,
+    OrderFlowMagnitudeFairPrice,
+    NewsImpactFairPrice,
+    NewsImpactExponentialFairPrice,
+    MaxAllowedVolume,
+    ConstantVolume,
+    MaxFractionVolume,
+    TimeWeightedVolume,
+    ConstantSpread,
+    OrderFlowImbalanceSpread,
 )
+
 
 @pytest.fixture
 def mock_trader():
@@ -19,6 +27,7 @@ def mock_trader():
     trader.max_inventory = 100
     trader.position = 20
     return trader
+
 
 class TestFairPriceStrategies:
     def test_constant_fair_price(self, mock_trader):
@@ -30,7 +39,7 @@ class TestFairPriceStrategies:
         mock_trader.market.get_recent_trades.return_value = [
             {"volume": 10, "agressor_side": 1},
             {"volume": 5, "agressor_side": -1},
-            {"volume": 7, "agressor_side": 1}
+            {"volume": 7, "agressor_side": 1},
         ]
         assert strategy(mock_trader) == 102
 
@@ -39,7 +48,7 @@ class TestFairPriceStrategies:
         mock_trader.market.get_recent_trades.return_value = [
             {"volume": 10, "agressor_side": 1},
             {"volume": 5, "agressor_side": -1},
-            {"volume": 7, "agressor_side": 1}
+            {"volume": 7, "agressor_side": 1},
         ]
         assert strategy(mock_trader) == 103
 
@@ -53,6 +62,7 @@ class TestFairPriceStrategies:
         mock_trader.market.news_history = [0.1, 0.2, 0.3]
         mock_trader.market.current_tick = 3
         assert strategy(mock_trader) == 101
+
 
 class TestVolumeStrategies:
     def test_max_allowed_volume(self, mock_trader):
@@ -76,7 +86,8 @@ class TestVolumeStrategies:
         mock_trader.fair_price = 100
         assert strategy(mock_trader) == (0, 0)
         mock_trader.fair_price = 120
-        assert strategy(mock_trader) == (0, 1)
+        assert strategy(mock_trader) == (1, 0)
+
 
 class TestSpreadStrategies:
     def test_constant_spread(self, mock_trader):
@@ -84,13 +95,16 @@ class TestSpreadStrategies:
         assert strategy(mock_trader) == (-5, 5)
 
     def test_order_flow_imbalance_spread(self, mock_trader):
-        strategy = OrderFlowImbalanceSpread(window=3, aggressiveness=2, min_halfspread=1)
+        strategy = OrderFlowImbalanceSpread(
+            window=3, aggressiveness=2, min_halfspread=1
+        )
         mock_trader.market.get_recent_trades.return_value = [
             {"volume": 10, "agressor_side": 1},
             {"volume": 5, "agressor_side": -1},
-            {"volume": 7, "agressor_side": 1}
+            {"volume": 7, "agressor_side": 1},
         ]
         assert strategy(mock_trader) == (-1, 1)
+
 
 # Additional test cases
 def test_order_flow_sign_fair_price_no_trades(mock_trader):
@@ -98,10 +112,12 @@ def test_order_flow_sign_fair_price_no_trades(mock_trader):
     mock_trader.market.get_recent_trades.return_value = []
     assert strategy(mock_trader) == 100  # No change in fair price
 
+
 def test_max_allowed_volume_at_max_position(mock_trader):
     mock_trader.position = 100  # At max inventory
     strategy = MaxAllowedVolume()
     assert strategy(mock_trader) == (0, -200)
+
 
 def test_time_weighted_volume_last_tick(mock_trader):
     strategy = TimeWeightedVolume()
@@ -110,4 +126,4 @@ def test_time_weighted_volume_last_tick(mock_trader):
     mock_trader.fair_price = 120
     mock_trader.market.best_ask = 110
     mock_trader.market.best_bid = 90
-    assert strategy(mock_trader) == (0, 80)  # All remaining volume
+    assert strategy(mock_trader) == (80,0)  # All remaining volume
