@@ -24,7 +24,7 @@ src/microstructpy/traders/ensemble.py
 src/microstructpy/traders/informed.py
 src/microstructpy/traders/market_maker.py
 src/microstructpy/traders/noise.py
-src/microstructpy/traders/policies.py
+src/microstructpy/traders/strategies.py
 src/microstructpy/visualization/__init__.py
 src/microstructpy/visualization/summary.py
 tests/test_continous.py

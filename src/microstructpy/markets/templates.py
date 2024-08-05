@@ -5,7 +5,7 @@ from microstructpy.traders.market_maker import BaseMarketMaker
 from microstructpy.traders.noise import NoiseTrader
 from microstructpy.traders.informed import BaseInformedTrader
 from microstructpy.traders.ensemble import ensemble_traders
-import microstructpy.traders.policies as pol
+import src.microstructpy.traders.strategy as pol
 import numpy as np
 
 def create_simple_market(initial_fair_price: int = 1000) -> ContinuousDoubleAuction:

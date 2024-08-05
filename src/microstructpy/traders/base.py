@@ -63,6 +63,7 @@ class Trader:
         self.fair_price = market.initial_fair_price
         self.market.participants.append(self)
         self.trader_id = self.market.participants.index(self)
+        self.name = name
 
     def cancel_orders(self, side) -> None:
         """
