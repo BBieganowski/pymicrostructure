@@ -1,9 +1,9 @@
 """Continuous type markets module for financial markets."""
 
-from microstructpy.markets.base import Market
-from microstructpy.orders.market import MarketOrder
-from microstructpy.orders.base import Order
-from microstructpy.traders.base import Trader
+from pymicrostructure.markets.base import Market
+from pymicrostructure.orders.market import MarketOrder
+from pymicrostructure.orders.base import Order
+from pymicrostructure.traders.base import Trader
 from operator import itemgetter, attrgetter
 import random
 from typing import Union, List, Dict, Any, Optional, Tuple

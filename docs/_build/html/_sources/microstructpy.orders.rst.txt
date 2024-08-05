@@ -5,7 +5,7 @@ Orders
 Limit Orders
 ---------------------------------
 
-.. automodule:: microstructpy.orders.limit
+.. automodule:: pymicrostructure.orders.limit
    :members:
    :undoc-members:
    :show-inheritance:
@@ -13,7 +13,7 @@ Limit Orders
 Market Orders
 ----------------------------------
 
-.. automodule:: microstructpy.orders.market
+.. automodule:: pymicrostructure.orders.market
    :members:
    :undoc-members:
    :show-inheritance:

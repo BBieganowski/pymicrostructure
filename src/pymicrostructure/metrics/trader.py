@@ -2,7 +2,7 @@
 
 import pandas as pd
 import numpy as np
-from microstructpy.traders.base import Trader
+from pymicrostructure.traders.base import Trader
 from typing import List, Tuple, Dict
 import math
 

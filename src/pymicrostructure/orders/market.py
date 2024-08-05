@@ -1,7 +1,7 @@
 """Market order class."""
 
 import numpy as np
-from microstructpy.orders.base import Order
+from pymicrostructure.orders.base import Order
 
 
 class MarketOrder(Order):

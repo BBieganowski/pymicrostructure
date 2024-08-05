@@ -1,6 +1,6 @@
 """Range of metrics to analyze market data."""
 
-from microstructpy.markets.base import Market
+from pymicrostructure.markets.base import Market
 import pandas as pd
 import numpy as np
 from numpy.lib.stride_tricks import as_strided

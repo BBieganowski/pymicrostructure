@@ -4,7 +4,7 @@ Vizualization
 Summary Vizualizations
 ------------------------------------------
 
-.. automodule:: microstructpy.visualization.summary
+.. automodule:: pymicrostructure.visualization.summary
    :members:
    :undoc-members:
    :show-inheritance:

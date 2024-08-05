@@ -1,13 +1,13 @@
 # User Guide
 
-This section is a more detailed guide on how to use the MicrostructPy package. It will cover how the package is structed, how to use the different modules, and how to run simulations.
+This section is a more detailed guide on how to use the PyMicrostructure package. It will cover how the package is structed, how to use the different modules, and how to run simulations.
 
 ## Basic Concepts
 
-MicrostructPy is designed with a modular, object-oriented architecture that allows for flexible and extensible market simulations. The core components of the package - Markets, Traders, and Strategies - interact in a well-defined manner to create a dynamic market environment.
+PyMicrostructure is designed with a modular, object-oriented architecture that allows for flexible and extensible market simulations. The core components of the package - Markets, Traders, and Strategies - interact in a well-defined manner to create a dynamic market environment.
 
 ### Markets
-Markets are the central hubs of activity in MicrostructPy. The primary market class is `ContinuousDoubleAuction`, which inherits from a base `Market` class.
+Markets are the central hubs of activity in PyMicrostructure. The primary market class is `ContinuousDoubleAuction`, which inherits from a base `Market` class.
 
 Key characteristics:
 - Maintains order books (bid and ask)
@@ -74,7 +74,7 @@ This architecture allows for easy extensibility:
 ## Markets - Detailed Guide
 
 
-The markets module in MicrostructPy is designed to simulate financial market mechanisms. Currently, it features the ContinuousDoubleAuction market, which models a continuous order book market commonly found in many financial exchanges.
+The markets module in PyMicrostructure is designed to simulate financial market mechanisms. Currently, it features the ContinuousDoubleAuction market, which models a continuous order book market commonly found in many financial exchanges.
 
 ### ContinuousDoubleAuction Market
 
@@ -84,7 +84,7 @@ The ContinuousDoubleAuction class represents a market where orders are continuou
 To create a new ContinuousDoubleAuction market:
 
 ```python
-from microstructpy.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
 
 market = ContinuousDoubleAuction(initial_fair_price=100)
 ```
@@ -148,11 +148,11 @@ Best Practices:
 ## Market Makers
 
 
-Market makers play a crucial role in providing liquidity to financial markets. In MicrostructPy, market makers are implemented as sophisticated traders that continuously post buy and sell orders to profit from the bid-ask spread while managing their inventory risk.
+Market makers play a crucial role in providing liquidity to financial markets. In PyMicrostructure, market makers are implemented as sophisticated traders that continuously post buy and sell orders to profit from the bid-ask spread while managing their inventory risk.
 
 ### BaseMarketMaker
 
-The `BaseMarketMaker` class serves as the foundation for all market maker implementations in MicrostructPy. It encapsulates the core logic of a market maker's operation.
+The `BaseMarketMaker` class serves as the foundation for all market maker implementations in PyMicrostructure. It encapsulates the core logic of a market maker's operation.
 
 Key Components
 
@@ -293,7 +293,7 @@ These informed traders can be used to create more realistic market simulations:
 
 ## Strategies
 
-The Strategies module is a crucial component of the `microstructpy` library, designed to provide various algorithms for all traders. These strategies determine how traders calculate fair prices, set trading volumes, and adjust spreads in response to market conditions.
+The Strategies module is a crucial component of the `pymicrostructure` library, designed to provide various algorithms for all traders. These strategies determine how traders calculate fair prices, set trading volumes, and adjust spreads in response to market conditions.
 
 The module defines three main types of strategies:
 
@@ -384,7 +384,7 @@ These strategies can be combined to create diverse trader behaviors:
 
 ## Trader Metrics
 
-The Trader Performance Metrics module is an essential component of the `microstructpy` library, designed to analyze and quantify the performance of traders in simulated markets. These metrics provide insights into various aspects of trading strategies, including profitability, risk, efficiency, and market impact.
+The Trader Performance Metrics module is an essential component of the `pymicrostructure` library, designed to analyze and quantify the performance of traders in simulated markets. These metrics provide insights into various aspects of trading strategies, including profitability, risk, efficiency, and market impact.
 Evaluating trader performance involves analyzing multiple aspects of their trading activity. These metrics help in comparing different strategies, identifying strengths and weaknesses, and optimizing trading algorithms.
 
 ### Profitability Metrics
@@ -466,7 +466,7 @@ These metrics can be used in various ways:
 
 ## Market Metrics
 
-The Market Performance Metrics module is a crucial component of the `microstructpy` library, designed to analyze the overall efficiency and emergent properties of simulated financial markets. These metrics provide insights into market liquidity, price efficiency, order flow dynamics, and other key aspects of market microstructure.
+The Market Performance Metrics module is a crucial component of the `pymicrostructure` library, designed to analyze the overall efficiency and emergent properties of simulated financial markets. These metrics provide insights into market liquidity, price efficiency, order flow dynamics, and other key aspects of market microstructure.
 Evaluating market performance involves analyzing various aspects of market behavior that emerge from the collective actions of traders. These metrics help in assessing market quality, identifying potential inefficiencies, and understanding the impact of different trading strategies on overall market dynamics.
 
 

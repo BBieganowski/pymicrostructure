@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import Mock, patch
 import numpy as np
-from microstructpy.markets.continuous import ContinuousDoubleAuction
-from microstructpy.orders.market import MarketOrder
-from microstructpy.traders.noise import (
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.orders.market import MarketOrder
+from pymicrostructure.traders.noise import (
     NoiseTrader,
 )  # Assuming the NoiseTrader class is in trader.py
 

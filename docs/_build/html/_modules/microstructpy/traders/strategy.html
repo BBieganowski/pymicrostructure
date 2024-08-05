@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>microstructpy.traders.strategy &mdash; MicrostructPy 0.0.1 documentation</title>
+  <title>pymicrostructure.traders.strategy &mdash; PyMicrostructure 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            MicrostructPy
+            PyMicrostructure
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,9 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with MicrostructPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with PyMicrostructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../microstructpy.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pymicrostructure.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -54,7 +54,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">MicrostructPy</a>
+          <a href="../../../index.html">PyMicrostructure</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -63,7 +63,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">microstructpy.traders.strategy</li>
+      <li class="breadcrumb-item active">pymicrostructure.traders.strategy</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -72,7 +72,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for microstructpy.traders.strategy</h1><div class="highlight"><pre>
+  <h1>Source code for pymicrostructure.traders.strategy</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Strategy module for market making algorithms.</span>
 
@@ -81,7 +81,7 @@
 <span class="sd">volume determination, and spread setting.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">microstructpy.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -90,7 +90,7 @@
 <span class="c1">##### Base Strategy Classes #####</span>
 
 <div class="viewcode-block" id="Strategy">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.Strategy">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.Strategy">[docs]</a>
 <span class="k">class</span> <span class="nc">Strategy</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract base class for all strategies.</span>
@@ -110,7 +110,7 @@
 
 
 <div class="viewcode-block" id="FairPriceStrategy">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.FairPriceStrategy">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.FairPriceStrategy">[docs]</a>
 <span class="k">class</span> <span class="nc">FairPriceStrategy</span><span class="p">(</span><span class="n">Strategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract base class for fair price calculation strategies.</span>
@@ -130,7 +130,7 @@
 
 
 <div class="viewcode-block" id="VolumeStrategy">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.VolumeStrategy">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.VolumeStrategy">[docs]</a>
 <span class="k">class</span> <span class="nc">VolumeStrategy</span><span class="p">(</span><span class="n">Strategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract base class for volume determination strategies.</span>
@@ -150,7 +150,7 @@
 
 
 <div class="viewcode-block" id="SpreadStrategy">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.SpreadStrategy">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.SpreadStrategy">[docs]</a>
 <span class="k">class</span> <span class="nc">SpreadStrategy</span><span class="p">(</span><span class="n">Strategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract base class for spread setting strategies.</span>
@@ -172,7 +172,7 @@
 <span class="c1">##### Fair Price Strategies #####</span>
 
 <div class="viewcode-block" id="ConstantFairPrice">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.ConstantFairPrice">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.ConstantFairPrice">[docs]</a>
 <span class="k">class</span> <span class="nc">ConstantFairPrice</span><span class="p">(</span><span class="n">FairPriceStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that returns a constant fair price.</span>
@@ -200,7 +200,7 @@
 
 
 <div class="viewcode-block" id="OrderFlowSignFairPrice">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.OrderFlowSignFairPrice">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.OrderFlowSignFairPrice">[docs]</a>
 <span class="k">class</span> <span class="nc">OrderFlowSignFairPrice</span><span class="p">(</span><span class="n">FairPriceStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that adjusts the fair price based on the sign of recent order flow.</span>
@@ -232,7 +232,7 @@
 
 
 <div class="viewcode-block" id="OrderFlowMagnitudeFairPrice">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.OrderFlowMagnitudeFairPrice">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.OrderFlowMagnitudeFairPrice">[docs]</a>
 <span class="k">class</span> <span class="nc">OrderFlowMagnitudeFairPrice</span><span class="p">(</span><span class="n">FairPriceStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that adjusts the fair price based on the magnitude of recent order flow.</span>
@@ -266,7 +266,7 @@
 
 
 <div class="viewcode-block" id="NewsImpactFairPrice">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.NewsImpactFairPrice">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.NewsImpactFairPrice">[docs]</a>
 <span class="k">class</span> <span class="nc">NewsImpactFairPrice</span><span class="p">(</span><span class="n">FairPriceStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that adjusts the fair price based on the latest news impact.</span>
@@ -297,7 +297,7 @@
 
 
 <div class="viewcode-block" id="NewsImpactExponentialFairPrice">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.NewsImpactExponentialFairPrice">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.NewsImpactExponentialFairPrice">[docs]</a>
 <span class="k">class</span> <span class="nc">NewsImpactExponentialFairPrice</span><span class="p">(</span><span class="n">FairPriceStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that adjusts the fair price based on an exponential function of recent news.</span>
@@ -332,7 +332,7 @@
 <span class="c1">##### Volume Strategies #####</span>
 
 <div class="viewcode-block" id="MaxAllowedVolume">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.MaxAllowedVolume">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.MaxAllowedVolume">[docs]</a>
 <span class="k">class</span> <span class="nc">MaxAllowedVolume</span><span class="p">(</span><span class="n">VolumeStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that sets the maximum allowed volume based on inventory limits.</span>
@@ -353,7 +353,7 @@
 
 
 <div class="viewcode-block" id="ConstantVolume">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.ConstantVolume">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.ConstantVolume">[docs]</a>
 <span class="k">class</span> <span class="nc">ConstantVolume</span><span class="p">(</span><span class="n">VolumeStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that sets a constant volume, limited by inventory constraints.</span>
@@ -383,7 +383,7 @@
 
 
 <div class="viewcode-block" id="MaxFractionVolume">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.MaxFractionVolume">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.MaxFractionVolume">[docs]</a>
 <span class="k">class</span> <span class="nc">MaxFractionVolume</span><span class="p">(</span><span class="n">VolumeStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that sets the volume as a fraction of the maximum allowed volume.</span>
@@ -413,7 +413,7 @@
 
 
 <div class="viewcode-block" id="TimeWeightedVolume">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.TimeWeightedVolume">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.TimeWeightedVolume">[docs]</a>
 <span class="k">class</span> <span class="nc">TimeWeightedVolume</span><span class="p">(</span><span class="n">VolumeStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that adjusts volume based on remaining time and current market conditions.</span>
@@ -449,7 +449,7 @@
 <span class="c1">##### Spread Strategies #####</span>
 
 <div class="viewcode-block" id="ConstantSpread">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.ConstantSpread">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.ConstantSpread">[docs]</a>
 <span class="k">class</span> <span class="nc">ConstantSpread</span><span class="p">(</span><span class="n">SpreadStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that sets a constant spread around the fair price.</span>
@@ -477,7 +477,7 @@
 
 
 <div class="viewcode-block" id="OrderFlowImbalanceSpread">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.strategy.OrderFlowImbalanceSpread">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.strategy.OrderFlowImbalanceSpread">[docs]</a>
 <span class="k">class</span> <span class="nc">OrderFlowImbalanceSpread</span><span class="p">(</span><span class="n">SpreadStrategy</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A strategy that adjusts the spread based on order flow imbalance.</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Getting Started with MicrostructPy &mdash; MicrostructPy 0.0.1 documentation</title>
+  <title>Getting Started with PyMicrostructure &mdash; PyMicrostructure 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="User Guide" href="user_guide.html" />
-    <link rel="prev" title="MicrostructPy documentation" href="index.html" /> 
+    <link rel="prev" title="PyMicrostructure documentation" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -34,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MicrostructPy
+            PyMicrostructure
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,14 +46,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with MicrostructPy</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with PyMicrostructure</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#basic-simulation-example">Basic Simulation Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#using-trader-templates-creating-a-kyle-like-market">Using Trader Templates: Creating a Kyle-like Market</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#building-new-traders-with-strategies-module">Building New Traders with Strategies Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="microstructpy.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pymicrostructure.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -62,7 +62,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MicrostructPy</a>
+          <a href="index.html">PyMicrostructure</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -70,7 +70,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Getting Started with MicrostructPy</li>
+      <li class="breadcrumb-item active">Getting Started with PyMicrostructure</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/getting_started.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,9 +80,9 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="getting-started-with-microstructpy">
-<h1>Getting Started with MicrostructPy<a class="headerlink" href="#getting-started-with-microstructpy" title="Link to this heading"></a></h1>
-<p>MicrostructPy is designed with a modular structure, allowing you to easily create and customize market simulations. The main components of the library interact as follows:</p>
+  <section id="getting-started-with-pymicrostructure">
+<h1>Getting Started with PyMicrostructure<a class="headerlink" href="#getting-started-with-pymicrostructure" title="Link to this heading"></a></h1>
+<p>PyMicrostructure is designed with a modular structure, allowing you to easily create and customize market simulations. The main components of the library interact as follows:</p>
 <ol class="arabic simple">
 <li><p><strong>Markets</strong>: The core of the simulation. They manage the order book, execute trades, and maintain the state of the market.</p></li>
 <li><p><strong>Traders</strong>: Entities that interact with the market by submitting orders.</p></li>
@@ -94,10 +94,10 @@
 <section id="basic-simulation-example">
 <h2>Basic Simulation Example<a class="headerlink" href="#basic-simulation-example" title="Link to this heading"></a></h2>
 <p>Let’s walk through a simple example to demonstrate how these components work together:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">microstructpy.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.market_maker</span> <span class="kn">import</span> <span class="n">DummyMarketMaker</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.noise</span> <span class="kn">import</span> <span class="n">NoiseTrader</span>
-<span class="kn">from</span> <span class="nn">microstructpy.visualization.summary</span> <span class="kn">import</span> <span class="n">participant_comparison</span><span class="p">,</span> <span class="n">price_path</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymicrostructure.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.market_maker</span> <span class="kn">import</span> <span class="n">DummyMarketMaker</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.noise</span> <span class="kn">import</span> <span class="n">NoiseTrader</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.visualization.summary</span> <span class="kn">import</span> <span class="n">participant_comparison</span><span class="p">,</span> <span class="n">price_path</span>
 
 <span class="c1"># 1. Create a market</span>
 <span class="n">market</span> <span class="o">=</span> <span class="n">ContinuousDoubleAuction</span><span class="p">(</span><span class="n">initial_fair_price</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
@@ -119,7 +119,7 @@
 <p>In this example, because <code class="docutils literal notranslate"><span class="pre">DummyMarketMaker</span></code> holds constant spread and fair price estimate, we see the bid and ask price not moving for the entirety of trading.
 This, combined with the fact that he is the only market maker and <code class="docutils literal notranslate"><span class="pre">NoiseTrader</span></code> submits random market orders, causes the market maker to make consistent profit.</p>
 <p>We can view details of the final performances of the traders with <code class="docutils literal notranslate"><span class="pre">participants_report</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">microstructpy.metrics.trader</span> <span class="kn">import</span> <span class="n">participants_report</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymicrostructure.metrics.trader</span> <span class="kn">import</span> <span class="n">participants_report</span>
 
 <span class="n">participants_report</span><span class="p">(</span><span class="n">market</span><span class="o">.</span><span class="n">participants</span><span class="p">)</span>
 </pre></div>
@@ -198,20 +198,20 @@ This, combined with the fact that he is the only market maker and <code class="d
 </tr>
 </tbody>
 </table>
-<p>Congratulations! You just simulated and analyzed your first trading session with MicrostructPy!</p>
+<p>Congratulations! You just simulated and analyzed your first trading session with PyMicrostructure!</p>
 </section>
 <section id="using-trader-templates-creating-a-kyle-like-market">
 <h2>Using Trader Templates: Creating a Kyle-like Market<a class="headerlink" href="#using-trader-templates-creating-a-kyle-like-market" title="Link to this heading"></a></h2>
-<p>MicroStructPy has multiple pre-built trader templates to choos from.
+<p>MicrostructPy has multiple pre-built trader templates to choos from.
 This example goes through a simple Kyle-like market. We’ll set up a continuous double auction market with
 three types of traders: a Kyle-style market maker, an informed trader, and a noise trader.</p>
 <p>First, import the necessary modules:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">microstructpy.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.market_maker</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.informed</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.noise</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">microstructpy.visualization.summary</span> <span class="kn">import</span> <span class="n">participant_comparison</span><span class="p">,</span> <span class="n">price_path</span>
-<span class="kn">from</span> <span class="nn">microstructpy.metrics.trader</span> <span class="kn">import</span> <span class="n">participants_report</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymicrostructure.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.market_maker</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.informed</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.noise</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.visualization.summary</span> <span class="kn">import</span> <span class="n">participant_comparison</span><span class="p">,</span> <span class="n">price_path</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.metrics.trader</span> <span class="kn">import</span> <span class="n">participants_report</span>
 </pre></div>
 </div>
 <p>Initialize the market:</p>
@@ -340,7 +340,7 @@ The price path, starting at 1000 and stabilizing at 1050 (the informed trader’
 <li><p>The informed trader (TWAPInformedTrader_1) also profits, as expected given its information advantage.</p></li>
 <li><p>The noise trader (NoiseTrader_2) loses money, which is typical for random trading strategies.
 The price path stabilizing at the informed trader’s target price (1050) shows how information is gradually incorporated into the market price through the interactions of these different trader types.
-This simple example demonstrates how MicroStructPy’s trader templates can be used to create and analyze complex market dynamics with just a few lines of code.</p></li>
+This simple example demonstrates how MicrostructPy’s trader templates can be used to create and analyze complex market dynamics with just a few lines of code.</p></li>
 </ul>
 </section>
 <section id="building-new-traders-with-strategies-module">
@@ -348,7 +348,7 @@ This simple example demonstrates how MicroStructPy’s trader templates can be u
 <p>We can now try to create a more custom Trader with strategy module.
 We’ll set up a market with a custom market maker, an informed trader, and a noise trader, and then analyze their performance.</p>
 <p>Apart from previous imports, let’s add:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">microstructpy.traders.strategy</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymicrostructure.traders.strategy</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 <p>Now, we’ll create our market, pre-defined traders and custom market-maker:</p>
@@ -476,14 +476,14 @@ We’ll set up a market with a custom market maker, an informed trader, and a no
 </tbody>
 </table>
 <p>We can also analyze specific market metrics, such as the quoted spread:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">microstructpy.metrics.market</span> <span class="kn">import</span> <span class="n">quoted_spread</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymicrostructure.metrics.market</span> <span class="kn">import</span> <span class="n">quoted_spread</span>
 
 <span class="n">quoted_spread</span><span class="p">(</span><span class="n">market</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><img alt="alt text" src="_images/custom_mm_spread.png" /></p>
 <p>This will plot the quoted spread over time, giving us insight into market liquidity dynamics.</p>
-<p>This example demonstrates how MicrostructPy can be used to create complex market simulations with different types of traders and custom strategies. By adjusting the parameters and strategies, you can explore a wide range of market scenarios and trader behaviors.</p>
+<p>This example demonstrates how PyMicrostructure can be used to create complex market simulations with different types of traders and custom strategies. By adjusting the parameters and strategies, you can explore a wide range of market scenarios and trader behaviors.</p>
 <p>Key points to note:</p>
 <ol class="arabic simple">
 <li><p>The market maker adapts its fair price, volume, and spread based on market conditions.</p></li>
@@ -497,7 +497,7 @@ We’ll set up a market with a custom market maker, an informed trader, and a no
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="MicrostructPy documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="PyMicrostructure documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="user_guide.html" class="btn btn-neutral float-right" title="User Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

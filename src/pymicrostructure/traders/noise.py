@@ -3,10 +3,10 @@
 import numpy as np
 import random
 from typing import Type
-from microstructpy.markets.base import Market
-from microstructpy.orders.market import MarketOrder
-from microstructpy.orders.limit import LimitOrder
-from microstructpy.traders.base import Trader
+from pymicrostructure.markets.base import Market
+from pymicrostructure.orders.market import MarketOrder
+from pymicrostructure.orders.limit import LimitOrder
+from pymicrostructure.traders.base import Trader
 from typing import Union, Type, Callable
 
 

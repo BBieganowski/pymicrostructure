@@ -1,11 +1,11 @@
 """Informed traders that have an opinion on the future price of a security."""
 
-from microstructpy.traders.base import Trader
-from microstructpy.orders.market import MarketOrder
-from microstructpy.orders.limit import LimitOrder
-from microstructpy.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.traders.base import Trader
+from pymicrostructure.orders.market import MarketOrder
+from pymicrostructure.orders.limit import LimitOrder
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
 from typing import Tuple, Callable
-from microstructpy.traders.strategy import *
+from pymicrostructure.traders.strategy import *
 
 import numpy as np
 

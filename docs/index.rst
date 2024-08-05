@@ -1,16 +1,16 @@
-.. MicrostructPy documentation master file, created by
+.. PyMicrostructure documentation master file, created by
    sphinx-quickstart on Mon Aug  5 13:24:33 2024.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-MicrostructPy documentation
+PyMicrostructure documentation
 ===========================
 
-MicrostructPy: A Flexible Market Microstructure Simulation Library
+PyMicrostructure: A Flexible Market Microstructure Simulation Library
 
-MicrostructPy is a powerful and flexible Python library designed for simulating and analyzing financial market microstructure. It provides a comprehensive set of tools for creating realistic market environments, implementing various types of traders, and analyzing market dynamics and trader performance.
+PyMicrostructure is a powerful and flexible Python library designed for simulating and analyzing financial market microstructure. It provides a comprehensive set of tools for creating realistic market environments, implementing various types of traders, and analyzing market dynamics and trader performance.
 
-Key features of MicrostructPy include:
+Key features of PyMicrostructure include:
 
 1. Market Simulation: Implement different market types, including continuous double auctions, with customizable parameters.
 
@@ -26,7 +26,7 @@ Key features of MicrostructPy include:
 
 7. Visualization Aids: Tools to help visualize order book dynamics, price movements, and trader performance.
 
-MicrostructPy is designed to be highly modular and extensible, allowing researchers and practitioners to easily implement and test new trading strategies, market mechanisms, and analysis techniques. Whether you're studying market impact, developing trading algorithms, or exploring market dynamics, MicrostructPy provides the building blocks for sophisticated financial market simulations.
+PyMicrostructure is designed to be highly modular and extensible, allowing researchers and practitioners to easily implement and test new trading strategies, market mechanisms, and analysis techniques. Whether you're studying market impact, developing trading algorithms, or exploring market dynamics, PyMicrostructure provides the building blocks for sophisticated financial market simulations.
 
 Note: This library is primarily intended for research and educational purposes. While it aims to provide realistic simulations, it should not be used for actual trading without extensive additional development and real-world validation.
 
@@ -36,7 +36,7 @@ Note: This library is primarily intended for research and educational purposes. 
 
    getting_started
    user_guide
-   microstructpy
+   pymicrostructure
    faq
    changelog
    contributing

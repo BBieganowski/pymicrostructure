@@ -4,7 +4,7 @@ Markets package
 Base Market
 ---------------------------------
 
-.. automodule:: microstructpy.markets.base
+.. automodule:: pymicrostructure.markets.base
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,7 +12,7 @@ Base Market
 Continuous Markets
 ---------------------------------------
 
-.. automodule:: microstructpy.markets.continuous
+.. automodule:: pymicrostructure.markets.continuous
    :members:
    :undoc-members:
    :show-inheritance:

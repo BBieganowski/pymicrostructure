@@ -1,10 +1,10 @@
 import pytest
 from unittest.mock import Mock
 import numpy as np
-from microstructpy.traders.base import Trader
+from pymicrostructure.traders.base import Trader
 
 # Import the strategies you want to test
-from microstructpy.traders.strategy import (
+from pymicrostructure.traders.strategy import (
     ConstantFairPrice,
     OrderFlowSignFairPrice,
     OrderFlowMagnitudeFairPrice,

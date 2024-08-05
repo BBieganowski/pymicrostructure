@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from microstructpy.markets.continuous import ContinuousDoubleAuction
-from microstructpy.orders.limit import LimitOrder
-from microstructpy.traders.market_maker import *
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.orders.limit import LimitOrder
+from pymicrostructure.traders.market_maker import *
 
 
 @pytest.fixture
@@ -81,7 +81,7 @@ def test_dummy_market_maker(mock_market):
     mock_market.submit_order.assert_called_once()
 
 
-@patch("microstructpy.traders.market_maker.OrderFlowSignFairPrice")
+@patch("pymicrostructure.traders.market_maker.OrderFlowSignFairPrice")
 def test_kyle_market_maker(mock_fair_price, mock_market):
     mm = KyleMarketMaker(market=mock_market, name="KyleMM")
 
@@ -92,9 +92,9 @@ def test_kyle_market_maker(mock_fair_price, mock_market):
     mock_fair_price.assert_called_once_with(window=5, aggressiveness=2)
 
 
-@patch("microstructpy.traders.market_maker.OrderFlowMagnitudeFairPrice")
-@patch("microstructpy.traders.market_maker.MaxFractionVolume")
-@patch("microstructpy.traders.market_maker.OrderFlowImbalanceSpread")
+@patch("pymicrostructure.traders.market_maker.OrderFlowMagnitudeFairPrice")
+@patch("pymicrostructure.traders.market_maker.MaxFractionVolume")
+@patch("pymicrostructure.traders.market_maker.OrderFlowImbalanceSpread")
 def test_adaptive_market_maker(mock_spread, mock_volume, mock_fair_price, mock_market):
     mm = AdaptiveMarketMaker(market=mock_market, name="AdaptiveMM")
 

@@ -1,6 +1,6 @@
-# MicrostructPy
+# PyMicrostructure
 
-microstructpy is a powerful Python library for simulating and analyzing financial market microstructure. It provides a flexible framework for modeling various market participants, implementing trading strategies, and evaluating market performance metrics.
+pymicrostructure is a powerful Python library for simulating and analyzing financial market microstructure. It provides a flexible framework for modeling various market participants, implementing trading strategies, and evaluating market performance metrics.
 
 ## Table of Contents
 
@@ -31,25 +31,25 @@ microstructpy is a powerful Python library for simulating and analyzing financia
 
 ## Installation
 
-To install microstructpy, run the following command:
+To install pymicrostructure, run the following command:
 
 ```bash
-pip install microstructpy
+pip install pymicrostructure
 ```
 
 ## Quick Start
 
-Here's a simple example to get you started with microstructpy:
+Here's a simple example to get you started with pymicrostructure:
 
 ```python
-from microstructpy.markets.continuous import ContinuousDoubleAuction
-from microstructpy.traders.market_maker import *
-from microstructpy.traders.informed import *
-from microstructpy.traders.noise import *
-from microstructpy.traders.strategy import *
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.traders.market_maker import *
+from pymicrostructure.traders.informed import *
+from pymicrostructure.traders.noise import *
+from pymicrostructure.traders.strategy import *
 
-from microstructpy.visualization.summary import participant_comparison, price_path
-from microstructpy.metrics.trader import participants_report
+from pymicrostructure.visualization.summary import participant_comparison, price_path
+from pymicrostructure.metrics.trader import participants_report
 
 market   = ContinuousDoubleAuction(initial_fair_price=1000)
 mm       = BaseMarketMaker(market,
@@ -68,7 +68,7 @@ price_path(market)
 
 ## Documentation
 
-For detailed documentation, please visit our [documentation site](https://microstructpy.readthedocs.io).
+For detailed documentation, please visit our [documentation site](https://pymicrostructure.readthedocs.io).
 
 ## Examples
 
@@ -81,8 +81,8 @@ You can find more examples in the `examples/` directory of this repository. Thes
 
 ## Contributing
 
-We welcome contributions to microstructpy! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to contribute, report issues, or suggest enhancements.
+We welcome contributions to pymicrostructure! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) file for details on how to contribute, report issues, or suggest enhancements.
 
 ## License
 
-microstructpy is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+pymicrostructure is released under the MIT License. See the [LICENSE](LICENSE) file for details.

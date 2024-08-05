@@ -4,9 +4,9 @@ API Reference
 .. toctree::
    :maxdepth: 2
 
-   microstructpy.markets
-   microstructpy.orders
-   microstructpy.traders
-   microstructpy.metrics
-   microstructpy.visualization
+   pymicrostructure.markets
+   pymicrostructure.orders
+   pymicrostructure.traders
+   pymicrostructure.metrics
+   pymicrostructure.visualization
 

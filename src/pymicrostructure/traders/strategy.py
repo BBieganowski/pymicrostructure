@@ -6,7 +6,7 @@ for various strategies used in market making, including fair price calculation,
 volume determination, and spread setting.
 """
 
-from microstructpy.traders.base import Trader
+from pymicrostructure.traders.base import Trader
 from functools import partial
 from typing import Tuple, Callable
 import numpy as np

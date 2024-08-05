@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "MicrostructPy"
+project = "PyMicrostructure"
 copyright = "2024, Bartosz Bieganowski"
 author = "Bartosz Bieganowski"
 release = "0.0.1"

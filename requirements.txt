@@ -5,3 +5,4 @@ tqdm>=4.66.5
 dill>=0.3.8
 scipy>=1.14.0
 statsmodels>=0.14.2
+tabulate>=0.8.9

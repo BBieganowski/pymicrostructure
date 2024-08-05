@@ -1,6 +1,6 @@
-# Getting Started with MicrostructPy
+# Getting Started with PyMicrostructure
 
-MicrostructPy is designed with a modular structure, allowing you to easily create and customize market simulations. The main components of the library interact as follows:
+PyMicrostructure is designed with a modular structure, allowing you to easily create and customize market simulations. The main components of the library interact as follows:
 
 1. **Markets**: The core of the simulation. They manage the order book, execute trades, and maintain the state of the market.
 2. **Traders**: Entities that interact with the market by submitting orders.
@@ -14,10 +14,10 @@ MicrostructPy is designed with a modular structure, allowing you to easily creat
 Let's walk through a simple example to demonstrate how these components work together:
 
 ```python
-from microstructpy.markets.continuous import ContinuousDoubleAuction
-from microstructpy.traders.market_maker import DummyMarketMaker
-from microstructpy.traders.noise import NoiseTrader
-from microstructpy.visualization.summary import participant_comparison, price_path
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.traders.market_maker import DummyMarketMaker
+from pymicrostructure.traders.noise import NoiseTrader
+from pymicrostructure.visualization.summary import participant_comparison, price_path
 
 # 1. Create a market
 market = ContinuousDoubleAuction(initial_fair_price=1000)
@@ -43,7 +43,7 @@ This, combined with the fact that he is the only market maker and `NoiseTrader` 
 We can view details of the final performances of the traders with `participants_report`:
 
 ```python
-from microstructpy.metrics.trader import participants_report
+from pymicrostructure.metrics.trader import participants_report
 
 participants_report(market.participants)
 ```
@@ -67,11 +67,11 @@ participants_report(market.participants)
 | volume_as_passive    |            0    |               500    |
 | agressor_ratio       |            1    |                 0    |
 
-Congratulations! You just simulated and analyzed your first trading session with MicrostructPy!
+Congratulations! You just simulated and analyzed your first trading session with PyMicrostructure!
 
 ## Using Trader Templates: Creating a Kyle-like Market
 
-MicroStructPy has multiple pre-built trader templates to choos from.
+MicrostructPy has multiple pre-built trader templates to choos from.
 This example goes through a simple Kyle-like market. We'll set up a continuous double auction market with 
 three types of traders: a Kyle-style market maker, an informed trader, and a noise trader.
 
@@ -79,12 +79,12 @@ three types of traders: a Kyle-style market maker, an informed trader, and a noi
 First, import the necessary modules:
 
 ```python
-from microstructpy.markets.continuous import ContinuousDoubleAuction
-from microstructpy.traders.market_maker import *
-from microstructpy.traders.informed import *
-from microstructpy.traders.noise import *
-from microstructpy.visualization.summary import participant_comparison, price_path
-from microstructpy.metrics.trader import participants_report
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.traders.market_maker import *
+from pymicrostructure.traders.informed import *
+from pymicrostructure.traders.noise import *
+from pymicrostructure.visualization.summary import participant_comparison, price_path
+from pymicrostructure.metrics.trader import participants_report
 ```
 
 Initialize the market:
@@ -153,7 +153,7 @@ In this example:
 - The informed trader (TWAPInformedTrader_1) also profits, as expected given its information advantage.
 - The noise trader (NoiseTrader_2) loses money, which is typical for random trading strategies.
 The price path stabilizing at the informed trader's target price (1050) shows how information is gradually incorporated into the market price through the interactions of these different trader types.
-This simple example demonstrates how MicroStructPy's trader templates can be used to create and analyze complex market dynamics with just a few lines of code.
+This simple example demonstrates how MicrostructPy's trader templates can be used to create and analyze complex market dynamics with just a few lines of code.
 
 ## Building New Traders with Strategies Module
 
@@ -165,7 +165,7 @@ We'll set up a market with a custom market maker, an informed trader, and a nois
 Apart from previous imports, let's add:
 
 ```python
-from microstructpy.traders.strategy import *
+from pymicrostructure.traders.strategy import *
 ```
 
 Now, we'll create our market, pre-defined traders and custom market-maker:
@@ -230,7 +230,7 @@ participants_report(market.participants)
 We can also analyze specific market metrics, such as the quoted spread:
 
 ```python
-from microstructpy.metrics.market import quoted_spread
+from pymicrostructure.metrics.market import quoted_spread
 
 quoted_spread(market).plot()
 ```
@@ -240,7 +240,7 @@ quoted_spread(market).plot()
 This will plot the quoted spread over time, giving us insight into market liquidity dynamics.
 
 
-This example demonstrates how MicrostructPy can be used to create complex market simulations with different types of traders and custom strategies. By adjusting the parameters and strategies, you can explore a wide range of market scenarios and trader behaviors.
+This example demonstrates how PyMicrostructure can be used to create complex market simulations with different types of traders and custom strategies. By adjusting the parameters and strategies, you can explore a wide range of market scenarios and trader behaviors.
 
 Key points to note:
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Guide &mdash; MicrostructPy 0.0.1 documentation</title>
+  <title>User Guide &mdash; PyMicrostructure 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="microstructpy.html" />
-    <link rel="prev" title="Getting Started with MicrostructPy" href="getting_started.html" /> 
+    <link rel="next" title="API Reference" href="pymicrostructure.html" />
+    <link rel="prev" title="Getting Started with PyMicrostructure" href="getting_started.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -34,7 +34,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            MicrostructPy
+            PyMicrostructure
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,7 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started with MicrostructPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started with PyMicrostructure</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#basic-concepts">Basic Concepts</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#markets">Markets</a></li>
@@ -127,7 +127,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="microstructpy.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pymicrostructure.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -136,7 +136,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">MicrostructPy</a>
+          <a href="index.html">PyMicrostructure</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -156,13 +156,13 @@
              
   <section id="user-guide">
 <h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading"></a></h1>
-<p>This section is a more detailed guide on how to use the MicrostructPy package. It will cover how the package is structed, how to use the different modules, and how to run simulations.</p>
+<p>This section is a more detailed guide on how to use the PyMicrostructure package. It will cover how the package is structed, how to use the different modules, and how to run simulations.</p>
 <section id="basic-concepts">
 <h2>Basic Concepts<a class="headerlink" href="#basic-concepts" title="Link to this heading"></a></h2>
-<p>MicrostructPy is designed with a modular, object-oriented architecture that allows for flexible and extensible market simulations. The core components of the package - Markets, Traders, and Strategies - interact in a well-defined manner to create a dynamic market environment.</p>
+<p>PyMicrostructure is designed with a modular, object-oriented architecture that allows for flexible and extensible market simulations. The core components of the package - Markets, Traders, and Strategies - interact in a well-defined manner to create a dynamic market environment.</p>
 <section id="markets">
 <h3>Markets<a class="headerlink" href="#markets" title="Link to this heading"></a></h3>
-<p>Markets are the central hubs of activity in MicrostructPy. The primary market class is <code class="docutils literal notranslate"><span class="pre">ContinuousDoubleAuction</span></code>, which inherits from a base <code class="docutils literal notranslate"><span class="pre">Market</span></code> class.</p>
+<p>Markets are the central hubs of activity in PyMicrostructure. The primary market class is <code class="docutils literal notranslate"><span class="pre">ContinuousDoubleAuction</span></code>, which inherits from a base <code class="docutils literal notranslate"><span class="pre">Market</span></code> class.</p>
 <p>Key characteristics:</p>
 <ul class="simple">
 <li><p>Maintains order books (bid and ask)</p></li>
@@ -250,12 +250,12 @@
 </section>
 <section id="markets-detailed-guide">
 <h2>Markets - Detailed Guide<a class="headerlink" href="#markets-detailed-guide" title="Link to this heading"></a></h2>
-<p>The markets module in MicrostructPy is designed to simulate financial market mechanisms. Currently, it features the ContinuousDoubleAuction market, which models a continuous order book market commonly found in many financial exchanges.</p>
+<p>The markets module in PyMicrostructure is designed to simulate financial market mechanisms. Currently, it features the ContinuousDoubleAuction market, which models a continuous order book market commonly found in many financial exchanges.</p>
 <section id="continuousdoubleauction-market">
 <h3>ContinuousDoubleAuction Market<a class="headerlink" href="#continuousdoubleauction-market" title="Link to this heading"></a></h3>
 <p>The ContinuousDoubleAuction class represents a market where orders are continuously matched as they arrive. It maintains separate bid and ask order books and handles order submission, matching, and execution.</p>
 <p>To create a new ContinuousDoubleAuction market:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">microstructpy.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pymicrostructure.markets.continuous</span> <span class="kn">import</span> <span class="n">ContinuousDoubleAuction</span>
 
 <span class="n">market</span> <span class="o">=</span> <span class="n">ContinuousDoubleAuction</span><span class="p">(</span><span class="n">initial_fair_price</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </pre></div>
@@ -316,10 +316,10 @@
 </section>
 <section id="market-makers">
 <h2>Market Makers<a class="headerlink" href="#market-makers" title="Link to this heading"></a></h2>
-<p>Market makers play a crucial role in providing liquidity to financial markets. In MicrostructPy, market makers are implemented as sophisticated traders that continuously post buy and sell orders to profit from the bid-ask spread while managing their inventory risk.</p>
+<p>Market makers play a crucial role in providing liquidity to financial markets. In PyMicrostructure, market makers are implemented as sophisticated traders that continuously post buy and sell orders to profit from the bid-ask spread while managing their inventory risk.</p>
 <section id="basemarketmaker">
 <h3>BaseMarketMaker<a class="headerlink" href="#basemarketmaker" title="Link to this heading"></a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">BaseMarketMaker</span></code> class serves as the foundation for all market maker implementations in MicrostructPy. It encapsulates the core logic of a market maker’s operation.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">BaseMarketMaker</span></code> class serves as the foundation for all market maker implementations in PyMicrostructure. It encapsulates the core logic of a market maker’s operation.</p>
 <p>Key Components</p>
 <ol class="arabic simple">
 <li><p><strong>Fair Price Strategy</strong>: Determines the market maker’s estimate of the asset’s true value.</p></li>
@@ -465,7 +465,7 @@
 </section>
 <section id="id1">
 <h2>Strategies<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<p>The Strategies module is a crucial component of the <code class="docutils literal notranslate"><span class="pre">microstructpy</span></code> library, designed to provide various algorithms for all traders. These strategies determine how traders calculate fair prices, set trading volumes, and adjust spreads in response to market conditions.</p>
+<p>The Strategies module is a crucial component of the <code class="docutils literal notranslate"><span class="pre">pymicrostructure</span></code> library, designed to provide various algorithms for all traders. These strategies determine how traders calculate fair prices, set trading volumes, and adjust spreads in response to market conditions.</p>
 <p>The module defines three main types of strategies:</p>
 <ol class="arabic simple">
 <li><p><strong>Fair Price Strategies</strong>: Determine the trader’s estimate of the asset’s true value.</p></li>
@@ -574,7 +574,7 @@
 </section>
 <section id="trader-metrics">
 <h2>Trader Metrics<a class="headerlink" href="#trader-metrics" title="Link to this heading"></a></h2>
-<p>The Trader Performance Metrics module is an essential component of the <code class="docutils literal notranslate"><span class="pre">microstructpy</span></code> library, designed to analyze and quantify the performance of traders in simulated markets. These metrics provide insights into various aspects of trading strategies, including profitability, risk, efficiency, and market impact.
+<p>The Trader Performance Metrics module is an essential component of the <code class="docutils literal notranslate"><span class="pre">pymicrostructure</span></code> library, designed to analyze and quantify the performance of traders in simulated markets. These metrics provide insights into various aspects of trading strategies, including profitability, risk, efficiency, and market impact.
 Evaluating trader performance involves analyzing multiple aspects of their trading activity. These metrics help in comparing different strategies, identifying strengths and weaknesses, and optimizing trading algorithms.</p>
 <section id="profitability-metrics">
 <h3>Profitability Metrics<a class="headerlink" href="#profitability-metrics" title="Link to this heading"></a></h3>
@@ -699,7 +699,7 @@ Evaluating trader performance involves analyzing multiple aspects of their tradi
 </section>
 <section id="market-metrics">
 <h2>Market Metrics<a class="headerlink" href="#market-metrics" title="Link to this heading"></a></h2>
-<p>The Market Performance Metrics module is a crucial component of the <code class="docutils literal notranslate"><span class="pre">microstructpy</span></code> library, designed to analyze the overall efficiency and emergent properties of simulated financial markets. These metrics provide insights into market liquidity, price efficiency, order flow dynamics, and other key aspects of market microstructure.
+<p>The Market Performance Metrics module is a crucial component of the <code class="docutils literal notranslate"><span class="pre">pymicrostructure</span></code> library, designed to analyze the overall efficiency and emergent properties of simulated financial markets. These metrics provide insights into market liquidity, price efficiency, order flow dynamics, and other key aspects of market microstructure.
 Evaluating market performance involves analyzing various aspects of market behavior that emerge from the collective actions of traders. These metrics help in assessing market quality, identifying potential inefficiencies, and understanding the impact of different trading strategies on overall market dynamics.</p>
 <p>Liquidity metrics measure how easily assets can be bought or sold without causing a significant price impact.</p>
 <section id="quoted-spread">
@@ -857,8 +857,8 @@ These metrics assess how well the market price reflects all available informatio
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started with MicrostructPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="microstructpy.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started with PyMicrostructure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pymicrostructure.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

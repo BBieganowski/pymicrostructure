@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>microstructpy.traders.noise &mdash; MicrostructPy 0.0.1 documentation</title>
+  <title>pymicrostructure.traders.noise &mdash; PyMicrostructure 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            MicrostructPy
+            PyMicrostructure
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,9 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with MicrostructPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with PyMicrostructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../microstructpy.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pymicrostructure.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -54,7 +54,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">MicrostructPy</a>
+          <a href="../../../index.html">PyMicrostructure</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -63,7 +63,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">microstructpy.traders.noise</li>
+      <li class="breadcrumb-item active">pymicrostructure.traders.noise</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -72,21 +72,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for microstructpy.traders.noise</h1><div class="highlight"><pre>
+  <h1>Source code for pymicrostructure.traders.noise</h1><div class="highlight"><pre>
 <span></span><span class="c1"># trader.py</span>
 <span class="sd">&quot;&quot;&quot;Base classes for noise traders.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
-<span class="kn">from</span> <span class="nn">microstructpy.markets.base</span> <span class="kn">import</span> <span class="n">Market</span>
-<span class="kn">from</span> <span class="nn">microstructpy.orders.market</span> <span class="kn">import</span> <span class="n">MarketOrder</span>
-<span class="kn">from</span> <span class="nn">microstructpy.orders.limit</span> <span class="kn">import</span> <span class="n">LimitOrder</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.markets.base</span> <span class="kn">import</span> <span class="n">Market</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.orders.market</span> <span class="kn">import</span> <span class="n">MarketOrder</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.orders.limit</span> <span class="kn">import</span> <span class="n">LimitOrder</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Callable</span>
 
 
 <div class="viewcode-block" id="NoiseTrader">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.noise.NoiseTrader">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.noise.NoiseTrader">[docs]</a>
 <span class="k">class</span> <span class="nc">NoiseTrader</span><span class="p">(</span><span class="n">Trader</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Noise trader that submits random market orders at a fixed rate.</span>
@@ -123,7 +123,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume_size</span>
 
 <div class="viewcode-block" id="NoiseTrader.update">
-<a class="viewcode-back" href="../../../microstructpy.traders.html#microstructpy.traders.noise.NoiseTrader.update">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.traders.html#pymicrostructure.traders.noise.NoiseTrader.update">[docs]</a>
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the trader&#39;s orders.&quot;&quot;&quot;</span>
         <span class="c1"># Submit a predefined order, for example:</span>

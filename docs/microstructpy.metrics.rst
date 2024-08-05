@@ -4,7 +4,7 @@ Metrics package
 Market-Specific
 -----------------------------------
 
-.. automodule:: microstructpy.metrics.market
+.. automodule:: pymicrostructure.metrics.market
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,7 +12,7 @@ Market-Specific
 Trader-Specific
 -----------------------------------
 
-.. automodule:: microstructpy.metrics.trader
+.. automodule:: pymicrostructure.metrics.trader
    :members:
    :undoc-members:
    :show-inheritance:

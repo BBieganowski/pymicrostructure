@@ -1,6 +1,6 @@
 """Limit order class."""
 
-from microstructpy.orders.base import Order
+from pymicrostructure.orders.base import Order
 
 
 class LimitOrder(Order):

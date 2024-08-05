@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>microstructpy.metrics.market &mdash; MicrostructPy 0.0.1 documentation</title>
+  <title>pymicrostructure.metrics.market &mdash; PyMicrostructure 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            MicrostructPy
+            PyMicrostructure
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,9 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with MicrostructPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with PyMicrostructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../microstructpy.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pymicrostructure.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -54,7 +54,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">MicrostructPy</a>
+          <a href="../../../index.html">PyMicrostructure</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -63,7 +63,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">microstructpy.metrics.market</li>
+      <li class="breadcrumb-item active">pymicrostructure.metrics.market</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -72,10 +72,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for microstructpy.metrics.market</h1><div class="highlight"><pre>
+  <h1>Source code for pymicrostructure.metrics.market</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Range of metrics to analyze market data.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">microstructpy.markets.base</span> <span class="kn">import</span> <span class="n">Market</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.markets.base</span> <span class="kn">import</span> <span class="n">Market</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.lib.stride_tricks</span> <span class="kn">import</span> <span class="n">as_strided</span>
@@ -88,7 +88,7 @@
 
 
 <div class="viewcode-block" id="quoted_spread">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.quoted_spread">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.quoted_spread">[docs]</a>
 <span class="k">def</span> <span class="nf">quoted_spread</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the quoted spread of a market.</span>
@@ -124,7 +124,7 @@
 
 
 <div class="viewcode-block" id="effective_spread">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.effective_spread">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.effective_spread">[docs]</a>
 <span class="k">def</span> <span class="nf">effective_spread</span><span class="p">(</span>
     <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -205,7 +205,7 @@
 
 
 <div class="viewcode-block" id="amihud_illiquidity">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.amihud_illiquidity">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.amihud_illiquidity">[docs]</a>
 <span class="k">def</span> <span class="nf">amihud_illiquidity</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window Amihud illiquidity measure (lambda) based on trade history.</span>
@@ -246,7 +246,7 @@
 
 
 <div class="viewcode-block" id="kyle_lambda">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.kyle_lambda">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.kyle_lambda">[docs]</a>
 <span class="k">def</span> <span class="nf">kyle_lambda</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window Kyle&#39;s Lambda based on trade history.</span>
@@ -294,7 +294,7 @@
 
 
 <div class="viewcode-block" id="returns_autocorrelation">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.returns_autocorrelation">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.returns_autocorrelation">[docs]</a>
 <span class="k">def</span> <span class="nf">returns_autocorrelation</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window auto-correlation of returns based on trade history.</span>
@@ -329,7 +329,7 @@
 
 
 <div class="viewcode-block" id="variance_ratio_test">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.variance_ratio_test">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.variance_ratio_test">[docs]</a>
 <span class="k">def</span> <span class="nf">variance_ratio_test</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Perform a rolling Variance Ratio test on price series.</span>
@@ -385,7 +385,7 @@
 
 
 <div class="viewcode-block" id="hurst_exponent">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.hurst_exponent">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.hurst_exponent">[docs]</a>
 <span class="k">def</span> <span class="nf">hurst_exponent</span><span class="p">(</span>
     <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">max_lag</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -451,7 +451,7 @@
 
 
 <div class="viewcode-block" id="rolling_adf_test">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.rolling_adf_test">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.rolling_adf_test">[docs]</a>
 <span class="k">def</span> <span class="nf">rolling_adf_test</span><span class="p">(</span>
     <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -501,7 +501,7 @@
 
 
 <div class="viewcode-block" id="rolling_cancellation_rate">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.rolling_cancellation_rate">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.rolling_cancellation_rate">[docs]</a>
 <span class="k">def</span> <span class="nf">rolling_cancellation_rate</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window cancellation rate based on order history.</span>
@@ -533,7 +533,7 @@
 
 
 <div class="viewcode-block" id="order_flow_imbalance">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.order_flow_imbalance">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.order_flow_imbalance">[docs]</a>
 <span class="k">def</span> <span class="nf">order_flow_imbalance</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window order flow imbalance based on trade history.</span>
@@ -570,7 +570,7 @@
 
 
 <div class="viewcode-block" id="trade_sign_autocorrelation">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.trade_sign_autocorrelation">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.trade_sign_autocorrelation">[docs]</a>
 <span class="k">def</span> <span class="nf">trade_sign_autocorrelation</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window auto-correlation of trade signs based on trade history.</span>
@@ -612,7 +612,7 @@
 
 
 <div class="viewcode-block" id="order_book_depth">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.order_book_depth">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.order_book_depth">[docs]</a>
 <span class="k">def</span> <span class="nf">order_book_depth</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window order book depth based on order book snapshots.</span>
@@ -654,7 +654,7 @@
 
 
 <div class="viewcode-block" id="order_book_heatmap">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.order_book_heatmap">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.order_book_heatmap">[docs]</a>
 <span class="k">def</span> <span class="nf">order_book_heatmap</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">frequency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a heatmap of order book volumes over time.</span>
@@ -702,7 +702,7 @@
 
 
 <div class="viewcode-block" id="vwap">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.vwap">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.vwap">[docs]</a>
 <span class="k">def</span> <span class="nf">vwap</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window volume-weighted average price (VWAP) based on trade history.</span>
@@ -739,7 +739,7 @@
 
 
 <div class="viewcode-block" id="trade_midprice_deviation">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.trade_midprice_deviation">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.trade_midprice_deviation">[docs]</a>
 <span class="k">def</span> <span class="nf">trade_midprice_deviation</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window deviation of trade prices from the midprice based on trade history.</span>
@@ -789,7 +789,7 @@
 
 
 <div class="viewcode-block" id="realized_volatility">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.realized_volatility">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.realized_volatility">[docs]</a>
 <span class="k">def</span> <span class="nf">realized_volatility</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window realized volatility based on trade history.</span>
@@ -829,7 +829,7 @@
 
 
 <div class="viewcode-block" id="roll_spread_estimator">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.roll_spread_estimator">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.roll_spread_estimator">[docs]</a>
 <span class="k">def</span> <span class="nf">roll_spread_estimator</span><span class="p">(</span>
     <span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">relative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
@@ -890,7 +890,7 @@
 
 
 <div class="viewcode-block" id="news_goodness">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.market.news_goodness">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.market.news_goodness">[docs]</a>
 <span class="k">def</span> <span class="nf">news_goodness</span><span class="p">(</span><span class="n">market</span><span class="p">:</span> <span class="n">Market</span><span class="p">,</span> <span class="n">window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the rolling window news goodness based on trade history.</span>

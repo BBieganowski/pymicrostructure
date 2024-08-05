@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from microstructpy.markets.continuous import ContinuousDoubleAuction
-from microstructpy.orders.market import MarketOrder
-from microstructpy.traders.informed import *
+from pymicrostructure.markets.continuous import ContinuousDoubleAuction
+from pymicrostructure.orders.market import MarketOrder
+from pymicrostructure.traders.informed import *
 
 
 @pytest.fixture

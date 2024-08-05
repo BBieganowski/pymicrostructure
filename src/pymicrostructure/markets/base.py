@@ -1,6 +1,6 @@
 """Base module for financial markets."""
 
-from microstructpy.orders.market import MarketOrder
+from pymicrostructure.orders.market import MarketOrder
 from typing import List, Any
 import random
 

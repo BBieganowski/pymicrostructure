@@ -1,8 +1,8 @@
 """Module for visualizing simulation results."""
 
-from microstructpy.markets.base import Market
-from microstructpy.traders.base import Trader
-from microstructpy.metrics.trader import (
+from pymicrostructure.markets.base import Market
+from pymicrostructure.traders.base import Trader
+from pymicrostructure.metrics.trader import (
     position_history,
     profit_history,
 )

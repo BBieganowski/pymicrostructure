@@ -1,6 +1,6 @@
-# Contributing to microstructpy
+# Contributing to pymicrostructure
 
-First off, thank you for considering contributing to microstructpy! It's people like you that make microstructpy such a great tool for financial market simulations.
+First off, thank you for considering contributing to pymicrostructure! It's people like you that make pymicrostructure such a great tool for financial market simulations.
 
 ## Table of Contents
 
@@ -15,12 +15,12 @@ First off, thank you for considering contributing to microstructpy! It's people 
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the microstructpy Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to me directly.
+This project and everyone participating in it is governed by the pymicrostructure Code of Conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to me directly.
 
 ## Getting Started
 
 1. Fork the repository on GitHub.
-2. Clone your fork locally: `git clone https://github.com/BBieganowski/microstructpy.git`
+2. Clone your fork locally: `git clone https://github.com/BBieganowski/pymicrostructure.git`
 3. Create a new branch for your feature or bug fix: `git checkout -b your-branch-name`
 4. Make your changes and commit them with a clear commit message.
 5. Push your changes to your fork on GitHub.
@@ -30,13 +30,13 @@ This project and everyone participating in it is governed by the microstructpy C
 
 ### Reporting Bugs
 
-- Ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/your-username/microstructpy/issues).
-- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/your-username/microstructpy/issues/new). Be sure to include a title and clear description, as much relevant information as possible, and a code sample or an executable test case demonstrating the expected behavior that is not occurring.
+- Ensure the bug was not already reported by searching on GitHub under [Issues](https://github.com/your-username/pymicrostructure/issues).
+- If you're unable to find an open issue addressing the problem, [open a new one](https://github.com/your-username/pymicrostructure/issues/new). Be sure to include a title and clear description, as much relevant information as possible, and a code sample or an executable test case demonstrating the expected behavior that is not occurring.
 
 ### Suggesting Enhancements
 
 - Open a new issue with a clear title and detailed description of the proposed enhancement.
-- Explain why this enhancement would be useful to most microstructpy users.
+- Explain why this enhancement would be useful to most pymicrostructure users.
 
 ### Pull Requests
 
@@ -48,7 +48,7 @@ This project and everyone participating in it is governed by the microstructpy C
 
 ### Python Style Guide
 
-microstructpy follows the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide for Python code. Additionally:
+pymicrostructure follows the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide for Python code. Additionally:
 
 - Use 4 spaces for indentation (not tabs).
 - Use docstrings for all public classes, methods, and functions.
@@ -86,4 +86,4 @@ microstructpy follows the [PEP 8](https://www.python.org/dev/peps/pep-0008/) sty
 - Write clear, concise docstrings for all functions, classes, and modules.
 - Update the README.md file if necessary.
 
-Thank you for your contributions to microstructpy! Your efforts help make this project better for everyone.
+Thank you for your contributions to pymicrostructure! Your efforts help make this project better for everyone.

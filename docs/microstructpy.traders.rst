@@ -4,7 +4,7 @@ Traders
 Base Trader
 ---------------------------------
 
-.. automodule:: microstructpy.traders.base
+.. automodule:: pymicrostructure.traders.base
    :members:
    :undoc-members:
    :show-inheritance:
@@ -14,7 +14,7 @@ Base Trader
 Informed Traders
 -------------------------------------
 
-.. automodule:: microstructpy.traders.informed
+.. automodule:: pymicrostructure.traders.informed
    :members:
    :undoc-members:
    :show-inheritance:
@@ -22,7 +22,7 @@ Informed Traders
 Market Makers
 ------------------------------------------
 
-.. automodule:: microstructpy.traders.market_maker
+.. automodule:: pymicrostructure.traders.market_maker
    :members:
    :undoc-members:
    :show-inheritance:
@@ -30,7 +30,7 @@ Market Makers
 Noise Traders
 ----------------------------------
 
-.. automodule:: microstructpy.traders.noise
+.. automodule:: pymicrostructure.traders.noise
    :members:
    :undoc-members:
    :show-inheritance:
@@ -38,7 +38,7 @@ Noise Traders
 Strategies
 -------------------------------------
 
-.. automodule:: microstructpy.traders.strategy
+.. automodule:: pymicrostructure.traders.strategy
    :members:
    :undoc-members:
    :show-inheritance:
@@ -47,7 +47,7 @@ Strategies
 Trader Ensembles
 -------------------------------------
 
-.. automodule:: microstructpy.traders.ensemble
+.. automodule:: pymicrostructure.traders.ensemble
    :members:
    :undoc-members:
    :show-inheritance:

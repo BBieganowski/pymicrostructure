@@ -6,11 +6,11 @@ for trading in financial markets. It includes a base class for market makers
 and several specific implementations with different pricing and volume strategies.
 """
 
-from microstructpy.traders.base import Trader
-from microstructpy.orders.limit import LimitOrder
-from microstructpy.markets.base import Market
+from pymicrostructure.traders.base import Trader
+from pymicrostructure.orders.limit import LimitOrder
+from pymicrostructure.markets.base import Market
 from typing import Callable
-from microstructpy.traders.strategy import *
+from pymicrostructure.traders.strategy import *
 
 
 class BaseMarketMaker(Trader):

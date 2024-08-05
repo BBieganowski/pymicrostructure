@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>microstructpy.metrics.trader &mdash; MicrostructPy 0.0.1 documentation</title>
+  <title>pymicrostructure.metrics.trader &mdash; PyMicrostructure 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../../index.html" class="icon icon-home">
-            MicrostructPy
+            PyMicrostructure
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,9 +43,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Links:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with MicrostructPy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started with PyMicrostructure</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../user_guide.html">User Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../microstructpy.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pymicrostructure.html">API Reference</a></li>
 </ul>
 
         </div>
@@ -54,7 +54,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">MicrostructPy</a>
+          <a href="../../../index.html">PyMicrostructure</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -63,7 +63,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">microstructpy.metrics.trader</li>
+      <li class="breadcrumb-item active">pymicrostructure.metrics.trader</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -72,18 +72,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for microstructpy.metrics.trader</h1><div class="highlight"><pre>
+  <h1>Source code for pymicrostructure.metrics.trader</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Metric for analyzing trader performance.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">microstructpy.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
+<span class="kn">from</span> <span class="nn">pymicrostructure.traders.base</span> <span class="kn">import</span> <span class="n">Trader</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">import</span> <span class="nn">math</span>
 
 
 <div class="viewcode-block" id="position_history">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.position_history">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.position_history">[docs]</a>
 <span class="k">def</span> <span class="nf">position_history</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the position history of a trader.</span>
@@ -120,7 +120,7 @@
 
 
 <div class="viewcode-block" id="profit_history">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.profit_history">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.profit_history">[docs]</a>
 <span class="k">def</span> <span class="nf">profit_history</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the profit history of a trader.</span>
@@ -163,7 +163,7 @@
 
 
 <div class="viewcode-block" id="calculate_trader_metrics">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.calculate_trader_metrics">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.calculate_trader_metrics">[docs]</a>
 <span class="k">def</span> <span class="nf">calculate_trader_metrics</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate various performance metrics for a trader.</span>
@@ -218,7 +218,7 @@
 
 
 <div class="viewcode-block" id="participants_report">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.participants_report">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.participants_report">[docs]</a>
 <span class="k">def</span> <span class="nf">participants_report</span><span class="p">(</span><span class="n">participants</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Trader</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a performance report for multiple traders.</span>
@@ -241,7 +241,7 @@
 
 
 <div class="viewcode-block" id="final_profit">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.final_profit">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.final_profit">[docs]</a>
 <span class="k">def</span> <span class="nf">final_profit</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the final profit of a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">profit_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
@@ -249,7 +249,7 @@
 
 
 <div class="viewcode-block" id="final_position">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.final_position">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.final_position">[docs]</a>
 <span class="k">def</span> <span class="nf">final_position</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the final position of a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">position_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
@@ -257,7 +257,7 @@
 
 
 <div class="viewcode-block" id="profit_per_state">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.profit_per_state">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.profit_per_state">[docs]</a>
 <span class="k">def</span> <span class="nf">profit_per_state</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the average profit per state for a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">profit_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></div>
@@ -265,7 +265,7 @@
 
 
 <div class="viewcode-block" id="std_profit_per_state">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.std_profit_per_state">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.std_profit_per_state">[docs]</a>
 <span class="k">def</span> <span class="nf">std_profit_per_state</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the standard deviation of profit per state for a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">profit_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">std</span><span class="p">()</span></div>
@@ -273,7 +273,7 @@
 
 
 <div class="viewcode-block" id="information_ratio">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.information_ratio">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.information_ratio">[docs]</a>
 <span class="k">def</span> <span class="nf">information_ratio</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the information ratio for a trader.&quot;&quot;&quot;</span>
     <span class="n">std</span> <span class="o">=</span> <span class="n">std_profit_per_state</span><span class="p">(</span><span class="n">trader</span><span class="p">)</span>
@@ -282,7 +282,7 @@
 
 
 <div class="viewcode-block" id="total_trades">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.total_trades">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.total_trades">[docs]</a>
 <span class="k">def</span> <span class="nf">total_trades</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the total number of trades for a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">trader</span><span class="o">.</span><span class="n">filled_trades</span><span class="p">)</span></div>
@@ -290,7 +290,7 @@
 
 
 <div class="viewcode-block" id="volume_traded">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.volume_traded">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.volume_traded">[docs]</a>
 <span class="k">def</span> <span class="nf">volume_traded</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the total volume traded by a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">trade</span><span class="p">[</span><span class="s2">&quot;volume&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trader</span><span class="o">.</span><span class="n">filled_trades</span><span class="p">)</span></div>
@@ -298,7 +298,7 @@
 
 
 <div class="viewcode-block" id="profit_per_volume">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.profit_per_volume">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.profit_per_volume">[docs]</a>
 <span class="k">def</span> <span class="nf">profit_per_volume</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the profit per unit volume for a trader.&quot;&quot;&quot;</span>
     <span class="n">vol</span> <span class="o">=</span> <span class="n">volume_traded</span><span class="p">(</span><span class="n">trader</span><span class="p">)</span>
@@ -307,7 +307,7 @@
 
 
 <div class="viewcode-block" id="average_trade_size">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.average_trade_size">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.average_trade_size">[docs]</a>
 <span class="k">def</span> <span class="nf">average_trade_size</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the average trade size for a trader.&quot;&quot;&quot;</span>
     <span class="n">trades</span> <span class="o">=</span> <span class="n">total_trades</span><span class="p">(</span><span class="n">trader</span><span class="p">)</span>
@@ -316,7 +316,7 @@
 
 
 <div class="viewcode-block" id="fill_rate">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.fill_rate">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.fill_rate">[docs]</a>
 <span class="k">def</span> <span class="nf">fill_rate</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the fill rate for a trader.&quot;&quot;&quot;</span>
     <span class="n">volume_submitted</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">volume</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">trader</span><span class="o">.</span><span class="n">orders</span><span class="p">)</span>
@@ -325,7 +325,7 @@
 
 
 <div class="viewcode-block" id="time_in_market">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.time_in_market">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.time_in_market">[docs]</a>
 <span class="k">def</span> <span class="nf">time_in_market</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the proportion of time the trader held a non-zero position.&quot;&quot;&quot;</span>
     <span class="n">pos_hist</span> <span class="o">=</span> <span class="n">position_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -334,7 +334,7 @@
 
 
 <div class="viewcode-block" id="mean_position">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.mean_position">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.mean_position">[docs]</a>
 <span class="k">def</span> <span class="nf">mean_position</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the mean position of a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">position_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span></div>
@@ -342,7 +342,7 @@
 
 
 <div class="viewcode-block" id="mean_abs_position">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.mean_abs_position">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.mean_abs_position">[docs]</a>
 <span class="k">def</span> <span class="nf">mean_abs_position</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the mean absolute position of a trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">position_history</span><span class="p">(</span><span class="n">trader</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span></div>
@@ -350,7 +350,7 @@
 
 
 <div class="viewcode-block" id="volume_as_agressor">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.volume_as_agressor">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.volume_as_agressor">[docs]</a>
 <span class="k">def</span> <span class="nf">volume_as_agressor</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the volume traded as an aggressor.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
@@ -362,7 +362,7 @@
 
 
 <div class="viewcode-block" id="volume_as_passive">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.volume_as_passive">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.volume_as_passive">[docs]</a>
 <span class="k">def</span> <span class="nf">volume_as_passive</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the volume traded as a passive participant.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
@@ -374,7 +374,7 @@
 
 
 <div class="viewcode-block" id="agressor_ratio">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.agressor_ratio">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.agressor_ratio">[docs]</a>
 <span class="k">def</span> <span class="nf">agressor_ratio</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the ratio of aggressive to total volume.&quot;&quot;&quot;</span>
     <span class="n">total_vol</span> <span class="o">=</span> <span class="n">volume_traded</span><span class="p">(</span><span class="n">trader</span><span class="p">)</span>
@@ -383,7 +383,7 @@
 
 
 <div class="viewcode-block" id="trader_report">
-<a class="viewcode-back" href="../../../microstructpy.metrics.html#microstructpy.metrics.trader.trader_report">[docs]</a>
+<a class="viewcode-back" href="../../../pymicrostructure.metrics.html#pymicrostructure.metrics.trader.trader_report">[docs]</a>
 <span class="k">def</span> <span class="nf">trader_report</span><span class="p">(</span><span class="n">trader</span><span class="p">:</span> <span class="n">Trader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a comprehensive report for a single trader.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">calculate_trader_metrics</span><span class="p">(</span><span class="n">trader</span><span class="p">)</span></div>
