@@ -149,7 +149,7 @@ class OrderFlowSignFairPrice(FairPriceStrategy):
         """
         orderflow = trader.market.get_recent_trades(self.window)
         orderflow = sum(
-            [trade["volume"] * trade["agressor_side"] for trade in orderflow]
+            [trade["volume"] * trade["aggressor_side"] for trade in orderflow]
         )
         return trader.fair_price + self.aggressiveness * int(np.sign(orderflow))
 
@@ -181,7 +181,7 @@ class OrderFlowMagnitudeFairPrice(FairPriceStrategy):
             int: The calculated fair price.
         """
         trades = trader.market.get_recent_trades(self.window)
-        orderflow = sum([trade["volume"] * trade["agressor_side"] for trade in trades])
+        orderflow = sum([trade["volume"] * trade["aggressor_side"] for trade in trades])
         total_volume = sum([trade["volume"] for trade in trades])
         indicator = orderflow / total_volume if total_volume != 0 else 0
         return trader.fair_price + int(indicator * self.aggressiveness * 3)
@@ -422,7 +422,7 @@ class OrderFlowImbalanceSpread(SpreadStrategy):
             Tuple[int, int]: The bid and ask spreads.
         """
         trades = trader.market.get_recent_trades(self.window)
-        orderflow = sum([trade["volume"] * trade["agressor_side"] for trade in trades])
+        orderflow = sum([trade["volume"] * trade["aggressor_side"] for trade in trades])
 
         total_volume = sum([trade["volume"] for trade in trades])
         indicator = orderflow / total_volume if total_volume != 0 else 0

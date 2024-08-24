@@ -1,0 +1,16 @@
+{
+    "version": "0.2",
+    "ignorePaths": [
+        "src",
+        "examples"
+    ],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "Midprice",
+        "midprices",
+        "pymicrostructure"
+    ],
+    "ignoreWords": [],
+    "import": []
+}

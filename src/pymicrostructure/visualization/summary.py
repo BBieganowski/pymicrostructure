@@ -60,7 +60,7 @@ def price_path(market: Market):
     None
     """
     prices = [trade["price"] for trade in market.trade_history]
-    agressor_side = [trade["agressor_side"] for trade in market.trade_history]
+    aggressor_side = [trade["aggressor_side"] for trade in market.trade_history]
     time = [trade["time"] for trade in market.trade_history]
 
     best_bid = [
@@ -76,7 +76,7 @@ def price_path(market: Market):
     plt.plot(ob_time, best_bid, label="Best Bid", color="green")
     plt.plot(ob_time, best_ask, label="Best Ask", color="red")
 
-    # plt.scatter(time, prices, c=agressor_side, cmap="RdYlGn_r", label="Trades")
+    # plt.scatter(time, prices, c=aggressor_side, cmap="RdYlGn_r", label="Trades")
 
     plt.xlabel("Time")
     plt.ylabel("Price")

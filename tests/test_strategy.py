@@ -37,18 +37,18 @@ class TestFairPriceStrategies:
     def test_order_flow_sign_fair_price(self, mock_trader):
         strategy = OrderFlowSignFairPrice(window=3, aggressiveness=2)
         mock_trader.market.get_recent_trades.return_value = [
-            {"volume": 10, "agressor_side": 1},
-            {"volume": 5, "agressor_side": -1},
-            {"volume": 7, "agressor_side": 1},
+            {"volume": 10, "aggressor_side": 1},
+            {"volume": 5, "aggressor_side": -1},
+            {"volume": 7, "aggressor_side": 1},
         ]
         assert strategy(mock_trader) == 102
 
     def test_order_flow_magnitude_fair_price(self, mock_trader):
         strategy = OrderFlowMagnitudeFairPrice(window=3, aggressiveness=2)
         mock_trader.market.get_recent_trades.return_value = [
-            {"volume": 10, "agressor_side": 1},
-            {"volume": 5, "agressor_side": -1},
-            {"volume": 7, "agressor_side": 1},
+            {"volume": 10, "aggressor_side": 1},
+            {"volume": 5, "aggressor_side": -1},
+            {"volume": 7, "aggressor_side": 1},
         ]
         assert strategy(mock_trader) == 103
 
@@ -99,9 +99,9 @@ class TestSpreadStrategies:
             window=3, aggressiveness=2, min_halfspread=1
         )
         mock_trader.market.get_recent_trades.return_value = [
-            {"volume": 10, "agressor_side": 1},
-            {"volume": 5, "agressor_side": -1},
-            {"volume": 7, "agressor_side": 1},
+            {"volume": 10, "aggressor_side": 1},
+            {"volume": 5, "aggressor_side": -1},
+            {"volume": 7, "aggressor_side": 1},
         ]
         assert strategy(mock_trader) == (-1, 1)
 
@@ -126,4 +126,4 @@ def test_time_weighted_volume_last_tick(mock_trader):
     mock_trader.fair_price = 120
     mock_trader.market.best_ask = 110
     mock_trader.market.best_bid = 90
-    assert strategy(mock_trader) == (80,0)  # All remaining volume
+    assert strategy(mock_trader) == (80, 0)  # All remaining volume

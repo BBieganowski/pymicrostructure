@@ -169,7 +169,7 @@ def kyle_lambda(market: Market, window: int = 20) -> pd.DataFrame:
     -----------
     market : Market
         An object representing the market, which must have a 'trade_history' attribute.
-        Each trade in the history should be a dictionary with 'price', 'volume', 'agressor_side', and 'time' keys.
+        Each trade in the history should be a dictionary with 'price', 'volume', 'aggressor_side', and 'time' keys.
     window : int, optional
         The size of the rolling window (in number of periods). Default is 20.
 
@@ -186,7 +186,7 @@ def kyle_lambda(market: Market, window: int = 20) -> pd.DataFrame:
     trades_df["price_change"] = trades_df["price"].diff()
 
     # Calculate signed volume (order flow)
-    trades_df["signed_volume"] = trades_df["volume"] * trades_df["agressor_side"]
+    trades_df["signed_volume"] = trades_df["volume"] * trades_df["aggressor_side"]
     trades_df.dropna(inplace=True)
 
     def rolling_regression(x, y, window=100):
@@ -214,7 +214,7 @@ def returns_autocorrelation(market: Market, window: int = 20) -> pd.DataFrame:
     -----------
     market : Market
         An object representing the market, which must have a 'trade_history' attribute.
-        Each trade in the history should be a dictionary with 'price', 'time', and 'agressor_side' keys.
+        Each trade in the history should be a dictionary with 'price', 'time', and 'aggressor_side' keys.
     window : int, optional
         The size of the rolling window (in number of periods). Default is 20.
 
@@ -440,7 +440,7 @@ def order_flow_imbalance(market: Market, window: int = 100) -> pd.DataFrame:
     -----------
     market : Market
         An object representing the market, which must have a 'trade_history' attribute.
-        Each trade in the history should be a dictionary with 'volume' and 'agressor_side' keys.
+        Each trade in the history should be a dictionary with 'volume' and 'aggressor_side' keys.
     window : int, optional
         The size of the rolling window. Default is 100.
 
@@ -454,7 +454,9 @@ def order_flow_imbalance(market: Market, window: int = 100) -> pd.DataFrame:
     trades_df.set_index("time", inplace=True)
 
     # Calculate order flow imbalance
-    trades_df["order_flow_imbalance"] = trades_df["volume"] * trades_df["agressor_side"]
+    trades_df["order_flow_imbalance"] = (
+        trades_df["volume"] * trades_df["aggressor_side"]
+    )
 
     # Calculate rolling window order flow imbalance
     trades_df["order_flow_imbalance"] = (
@@ -474,7 +476,7 @@ def trade_sign_autocorrelation(market: Market, window: int = 100) -> pd.DataFram
     -----------
     market : Market
         An object representing the market, which must have a 'trade_history' attribute.
-        Each trade in the history should be a dictionary with 'price', 'time', and 'agressor_side' keys.
+        Each trade in the history should be a dictionary with 'price', 'time', and 'aggressor_side' keys.
     window : int, optional
         The size of the rolling window. Default is 100.
 
@@ -488,7 +490,7 @@ def trade_sign_autocorrelation(market: Market, window: int = 100) -> pd.DataFram
     trades_df.set_index("time", inplace=True)
 
     # Calculate trade signs
-    trades_df["trade_sign"] = np.sign(trades_df["agressor_side"])
+    trades_df["trade_sign"] = np.sign(trades_df["aggressor_side"])
 
     # Calculate rolling window auto-correlation
     trades_df["trade_sign_autocorr"] = (

@@ -82,5 +82,6 @@ def test_base_informed_trader_update_no_action(mock_market):
 
     mock_market.submit_order.assert_not_called()
 
+
 if __name__ == "__main__":
     pytest.main()

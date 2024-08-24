@@ -52,7 +52,7 @@ class ContinuousDoubleAuction(Market):
         Match and execute orders in the order book.
     get_participant(trader_id)
         Retrieve a market participant by their trader ID.
-    execute_trade(buyer, seller, price, volume, agressor_side)
+    execute_trade(buyer, seller, price, volume, aggressor_side)
         Execute a trade between two participants.
     update_order_status(order)
         Update the status of an order after matching.
@@ -158,22 +158,30 @@ class ContinuousDoubleAuction(Market):
         for order in self.bid_ob:
             bid_volumes[order.price] += order.volume
         for order in self.ask_ob:
-            ask_volumes[order.price] += abs(order.volume)
+            ask_volumes[order.price] += order.volume
 
-        bid_ob_snapshot = [{"price": price, "volume": volume} for price, volume in bid_volumes.items()]
-        ask_ob_snapshot = [{"price": price, "volume": volume} for price, volume in ask_volumes.items()]
+        bid_ob_snapshot = [
+            {"price": price, "volume": volume} for price, volume in bid_volumes.items()
+        ]
+        ask_ob_snapshot = [
+            {"price": price, "volume": volume} for price, volume in ask_volumes.items()
+        ]
 
         bid_ob_snapshot.sort(key=lambda x: x["price"], reverse=True)
         ask_ob_snapshot.sort(key=lambda x: x["price"])
 
-        self.ob_snapshots.append({
-            "bid": bid_ob_snapshot,
-            "ask": ask_ob_snapshot,
-            "time": self.last_submission_time,
-        })
+        self.ob_snapshots.append(
+            {
+                "bid": bid_ob_snapshot,
+                "ask": ask_ob_snapshot,
+                "time": self.last_submission_time,
+            }
+        )
 
         if bid_ob_snapshot and ask_ob_snapshot:
-            new_midprice = (bid_ob_snapshot[0]["price"] + ask_ob_snapshot[0]["price"]) / 2
+            new_midprice = (
+                bid_ob_snapshot[0]["price"] + ask_ob_snapshot[0]["price"]
+            ) / 2
         elif self.current_tick == 0:
             new_midprice = 0
         else:
@@ -181,7 +189,6 @@ class ContinuousDoubleAuction(Market):
 
         self.midprices.append((self.last_submission_time, new_midprice))
 
-    
     def match_orders(self):
         """
         Match and execute orders in the order book.
@@ -202,12 +209,12 @@ class ContinuousDoubleAuction(Market):
                 bid_order.price if bid_order.time < ask_order.time else ask_order.price
             )
             fill_volume = min(bid_order.active_volume, abs(ask_order.active_volume))
-            agressor_side = -1 if bid_order.time < ask_order.time else 1
+            aggressor_side = -1 if bid_order.time < ask_order.time else 1
 
             buyer = self.get_participant(bid_order.trader_id)
             seller = self.get_participant(ask_order.trader_id)
 
-            self.execute_trade(buyer, seller, fill_price, fill_volume, agressor_side)
+            self.execute_trade(buyer, seller, fill_price, fill_volume, aggressor_side)
 
             bid_order.filled += fill_volume
             ask_order.filled -= fill_volume
@@ -253,7 +260,7 @@ class ContinuousDoubleAuction(Market):
         seller: Trader,
         price: float,
         volume: Union[int, float],
-        agressor_side: int,
+        aggressor_side: int,
     ) -> None:
         """
         Execute a trade between two participants.
@@ -271,7 +278,7 @@ class ContinuousDoubleAuction(Market):
             The price at which the trade is executed.
         volume : int or float
             The volume of the asset being traded.
-        agressor_side : int
+        aggressor_side : int
             Indicates which side initiated the trade (1 for buy, -1 for sell).
         """
         buyer.position += volume
@@ -280,7 +287,7 @@ class ContinuousDoubleAuction(Market):
         trade_info = {
             "price": price,
             "volume": volume,
-            "agressor_side": agressor_side,
+            "aggressor_side": aggressor_side,
             "time": self.last_submission_time,
         }
 
@@ -296,7 +303,7 @@ class ContinuousDoubleAuction(Market):
             (
                 self.last_submission_time,
                 "TRADE",
-                f"{trade_info['volume']} @ {trade_info['price']}, AGG: {trade_info['agressor_side']}",
+                f"{trade_info['volume']} @ {trade_info['price']}, AGG: {trade_info['aggressor_side']}",
             )
         )
         self.trade_history.append(trade_info)

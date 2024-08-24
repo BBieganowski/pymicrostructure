@@ -100,12 +100,12 @@ def calculate_trader_metrics(trader: Trader) -> Dict[str, float]:
     filled_trades = trader.filled_trades
     total_volume = sum(abs(trade["volume"]) for trade in filled_trades)
 
-    agressor_volume = sum(
+    aggressor_volume = sum(
         abs(trade["volume"])
         for trade in filled_trades
-        if trade["volume"] * trade["agressor_side"] > 0
+        if trade["volume"] * trade["aggressor_side"] > 0
     )
-    passive_volume = total_volume - agressor_volume
+    passive_volume = total_volume - aggressor_volume
 
     return {
         "final_profit": profit_hist[-1],
@@ -127,9 +127,9 @@ def calculate_trader_metrics(trader: Trader) -> Dict[str, float]:
         "time_in_market": sum(1 for pos in pos_hist if pos != 0) / len(pos_hist),
         "mean_position": np.mean(pos_hist),
         "mean_abs_position": np.mean(np.abs(pos_hist)),
-        "volume_as_agressor": agressor_volume,
+        "volume_as_aggressor": aggressor_volume,
         "volume_as_passive": passive_volume,
-        "agressor_ratio": agressor_volume / total_volume if total_volume != 0 else 0,
+        "aggressor_ratio": aggressor_volume / total_volume if total_volume != 0 else 0,
     }
 
 
@@ -223,12 +223,12 @@ def mean_abs_position(trader: Trader) -> float:
     return np.mean(np.abs(position_history(trader)[1]))
 
 
-def volume_as_agressor(trader: Trader) -> float:
+def volume_as_aggressor(trader: Trader) -> float:
     """Calculate the volume traded as an aggressor."""
     return sum(
         abs(trade["volume"])
         for trade in trader.filled_trades
-        if trade["volume"] * trade["agressor_side"] > 0
+        if trade["volume"] * trade["aggressor_side"] > 0
     )
 
 
@@ -237,14 +237,14 @@ def volume_as_passive(trader: Trader) -> float:
     return sum(
         abs(trade["volume"])
         for trade in trader.filled_trades
-        if trade["volume"] * trade["agressor_side"] < 0
+        if trade["volume"] * trade["aggressor_side"] < 0
     )
 
 
-def agressor_ratio(trader: Trader) -> float:
+def aggressor_ratio(trader: Trader) -> float:
     """Calculate the ratio of aggressive to total volume."""
     total_vol = volume_traded(trader)
-    return volume_as_agressor(trader) / total_vol if total_vol != 0 else 0
+    return volume_as_aggressor(trader) / total_vol if total_vol != 0 else 0
 
 
 def trader_report(trader: Trader) -> Dict[str, float]:

@@ -9,7 +9,11 @@ from pymicrostructure.orders.limit import LimitOrder
 from pymicrostructure.utils.utils import protect
 
 
-class Trader(metaclass=protect("cancel_orders_by_side", "cancel_order_by_id", "cancel_all_orders")):
+class Trader(
+    metaclass=protect(
+        "cancel_orders_by_side", "cancel_order_by_id", "cancel_all_orders"
+    )
+):
     """
     Represents a trader in a financial market.
 
