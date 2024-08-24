@@ -1,5 +1,7 @@
 # PyMicrostructure
 
+![alt text](docs/logo.png "participant report")
+
 pymicrostructure is a powerful Python library for simulating and analyzing financial market microstructure. It provides a flexible framework for modeling various market participants, implementing trading strategies, and evaluating market performance metrics.
 
 ## Table of Contents
@@ -86,3 +88,6 @@ We welcome contributions to pymicrostructure! Please see our [CONTRIBUTING.md](C
 ## License
 
 pymicrostructure is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Attributions
+Logo Icon: analysis by Arif Arisandi from <a href="https://thenounproject.com/browse/icons/term/analysis/" target="_blank" title="analysis Icons">Noun Project</a> (CC BY 3.0)
