@@ -9,6 +9,9 @@ import random
 from typing import Union, List, Dict, Any, Optional, Tuple
 from tqdm import tqdm
 from dill import load, dump
+from collections import defaultdict
+from numba import jit, njit, types
+from numba.experimental import jitclass
 
 
 class ContinuousDoubleAuction(Market):
@@ -96,7 +99,7 @@ class ContinuousDoubleAuction(Market):
         self.last_submission_time += 1
 
         for order in orders:
-
+            submitting_trader = self.get_participant(order.trader_id)
             if isinstance(order, MarketOrder):
                 if order.volume > 0 and not self.ask_ob:
                     self.msg_history.append(
@@ -104,12 +107,14 @@ class ContinuousDoubleAuction(Market):
                     )
 
                     order.status = "rejected"
+                    submitting_trader.inactive_orders.append(order)
                     break
                 elif order.volume < 0 and not self.bid_ob:
                     self.msg_history.append(
                         (self.last_submission_time, "REJECT", order)
                     )
                     order.status = "rejected"
+                    submitting_trader.inactive_orders.append(order)
                     break
 
             order.time = self.last_submission_time
@@ -126,7 +131,7 @@ class ContinuousDoubleAuction(Market):
                     for participant in self.participants
                     if participant.trader_id == order.trader_id
                 )
-                submitting_trader.orders.append(order)
+                submitting_trader.active_orders.append(order)
             except StopIteration:
                 raise ValueError(f"No trader found with ID {order.trader_id}")
 
@@ -145,49 +150,38 @@ class ContinuousDoubleAuction(Market):
         This method aggregates orders at each price level, creates a snapshot of the
         current order book state, and updates the midprice.
         """
-        # Aggregate orders at the same price level
-        bid_prices = set([order.price for order in self.bid_ob])
-        bid_prices = sorted(bid_prices, reverse=True)
-        ask_prices = set([order.price for order in self.ask_ob])
-        bid_volumes = [
-            sum([order.volume for order in self.bid_ob if order.price == price])
-            for price in bid_prices
-        ]
-        ask_volumes = [
-            sum([order.volume for order in self.ask_ob if order.price == price])
-            for price in ask_prices
-        ]
-        bid_ob_snapshot = [
-            {"price": price, "volume": volume}
-            for price, volume in zip(bid_prices, bid_volumes)
-        ]
-        # sort
-        bid_ob_snapshot.sort(key=itemgetter("price"), reverse=True)
-        ask_ob_snapshot = [
-            {"price": price, "volume": volume}
-            for price, volume in zip(ask_prices, ask_volumes)
-        ]
-        ask_ob_snapshot.sort(key=itemgetter("price"))
-        self.ob_snapshots.append(
-            {
-                "bid": bid_ob_snapshot,
-                "ask": ask_ob_snapshot,
-                "time": self.last_submission_time,
-            }
-        )
-        if bid_ob_snapshot and ask_ob_snapshot:
-            self.midprices.append(
-                (
-                    self.last_submission_time,
-                    (bid_ob_snapshot[0]["price"] + ask_ob_snapshot[0]["price"]) / 2,
-                )
-            )
-        elif self.current_tick == 0:
-            self.midprices.append((self.last_submission_time, 0))
-        else:
-            # last not empty midprice
-            self.midprices.append((self.last_submission_time, self.midprices[-1][1]))
+        from collections import defaultdict
 
+        bid_volumes = defaultdict(int)
+        ask_volumes = defaultdict(int)
+
+        for order in self.bid_ob:
+            bid_volumes[order.price] += order.volume
+        for order in self.ask_ob:
+            ask_volumes[order.price] += abs(order.volume)
+
+        bid_ob_snapshot = [{"price": price, "volume": volume} for price, volume in bid_volumes.items()]
+        ask_ob_snapshot = [{"price": price, "volume": volume} for price, volume in ask_volumes.items()]
+
+        bid_ob_snapshot.sort(key=lambda x: x["price"], reverse=True)
+        ask_ob_snapshot.sort(key=lambda x: x["price"])
+
+        self.ob_snapshots.append({
+            "bid": bid_ob_snapshot,
+            "ask": ask_ob_snapshot,
+            "time": self.last_submission_time,
+        })
+
+        if bid_ob_snapshot and ask_ob_snapshot:
+            new_midprice = (bid_ob_snapshot[0]["price"] + ask_ob_snapshot[0]["price"]) / 2
+        elif self.current_tick == 0:
+            new_midprice = 0
+        else:
+            new_midprice = self.midprices[-1][1]
+
+        self.midprices.append((self.last_submission_time, new_midprice))
+
+    
     def match_orders(self):
         """
         Match and execute orders in the order book.

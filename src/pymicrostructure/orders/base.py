@@ -4,6 +4,7 @@ from typing import Union
 import numpy as np
 
 
+
 class Order:
     """
     Represents a generic order.
@@ -29,6 +30,7 @@ class Order:
     active_volume()
         Calculate the volume of the order that has not yet been filled.
     """
+    _id_counter = 0
 
     def __init__(self, trader_id: int, volume: int) -> None:
         """Initialize a new Order."""
@@ -39,6 +41,8 @@ class Order:
         self.time = None
         self.status = "created"
         self.filled = 0
+        self.id = Order._id_counter
+        Order._id_counter += 1
 
     @property
     def active_volume(self) -> int:

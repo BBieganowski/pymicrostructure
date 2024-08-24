@@ -6,9 +6,10 @@ from typing import Type
 from pymicrostructure.markets.base import Market
 from pymicrostructure.orders.market import MarketOrder
 from pymicrostructure.orders.limit import LimitOrder
+from pymicrostructure.utils.utils import protect
 
 
-class Trader:
+class Trader(metaclass=protect("cancel_orders_by_side", "cancel_order_by_id", "cancel_all_orders")):
     """
     Represents a trader in a financial market.
 
@@ -57,6 +58,8 @@ class Trader:
         """
         self.market = market
         self.orders = []
+        self.active_orders = []
+        self.inactive_orders = []
         self.filled_trades = []
         self.position = 0
         self.include_in_results = include_in_results
@@ -65,44 +68,49 @@ class Trader:
         self.trader_id = self.market.participants.index(self)
         self.name = name
 
-    def cancel_orders(self, side) -> None:
+    def cancel_order_by_id(self, order_id: int) -> None:
         """
-        Cancel active or partially filled orders on a specific side.
+        Cancel an order by its unique identifier.
 
         Parameters:
         -----------
-        side : int
-            The side of the orders to cancel (1 for buy, -1 for sell).
+        order_id : int
+            The unique identifier of the order to cancel.
         """
-        for order in self.orders:
-            if (
-                order.status == "active"
-                or order.status == "partial"
-                and np.sign(order.volume) == side
-            ):
+        for order in self.active_orders:
+            if order.id == order_id:
                 order.status = "canceled"
                 self.market.msg_history.append((self.trader_id, "CANCEL", order))
                 self.market.cancellations.append(order)
+                self.active_orders.remove(order)
+                self.inactive_orders.append(order)
+                break
+        self.market.drop_cancelled_orders()
+
+    def cancel_orders_by_side(self, side: str) -> None:
+        """
+        Cancel all active or partially filled orders on a specific side.
+
+        Parameters:
+        -----------
+        side : str
+            The side of the market (either 'buy' or 'sell') on which to cancel orders.
+        """
+        for order in self.active_orders:
+            if order.side == side:
+                order.status = "canceled"
+                self.market.msg_history.append((self.trader_id, "CANCEL", order))
+                self.market.cancellations.append(order)
+                self.inactive_orders.append(order)
+        self.active_orders = [o for o in self.active_orders if o.status == "active"]
         self.market.drop_cancelled_orders()
 
     def cancel_all_orders(self) -> None:
         """Cancel all active or partially filled orders for this trader."""
-        for order in self.orders:
-            if order.status == "active" or order.status == "partial":
-                order.status = "canceled"
-                self.market.cancellations.append(order)
+        for order in self.active_orders:
+            order.status = "canceled"
+            self.market.msg_history.append((self.trader_id, "CANCEL", order))
+            self.market.cancellations.append(order)
+            self.inactive_orders.append(order)
+        self.active_orders = []
         self.market.drop_cancelled_orders()
-
-    def submit_order(self) -> None:
-        """
-        Submit an order to the market.
-
-        This method should be overridden by subclasses to implement specific order
-        submission logic.
-
-        Raises:
-        -------
-        NotImplementedError
-            If this method is not overridden by a subclass.
-        """
-        raise NotImplementedError("This method should be overridden by subclasses")
