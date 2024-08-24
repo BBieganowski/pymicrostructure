@@ -1,6 +1,6 @@
 # User Guide
 
-This section is a more detailed guide on how to use the PyMicrostructure package. It will cover how the package is structed, how to use the different modules, and how to run simulations.
+This section is a more detailed guide on how to use the PyMicrostructure package. It will cover how the package is structured, how to use the different modules, and how to run simulations.
 
 ## Basic Concepts
 
@@ -95,7 +95,7 @@ Key Attributes:
 
 - `bid_ob` and `ask_ob`: Lists containing bid and ask orders.
 - `ob_snapshots`: List of order book snapshots over time.
-- `midprices`: List of midprice values at each snapshot.
+- `midprices`: List of mid-price values at each snapshot.
 - `current_tick`: The current time step of the simulation.
 - `news_history`: List tracking the arrival of market news.
 

@@ -10,8 +10,6 @@ from typing import Union, List, Dict, Any, Optional, Tuple
 from tqdm import tqdm
 from dill import load, dump
 from collections import defaultdict
-from numba import jit, njit, types
-from numba.experimental import jitclass
 
 
 class ContinuousDoubleAuction(Market):

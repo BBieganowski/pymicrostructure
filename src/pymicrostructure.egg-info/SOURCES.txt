@@ -25,6 +25,8 @@ src/pymicrostructure/traders/informed.py
 src/pymicrostructure/traders/market_maker.py
 src/pymicrostructure/traders/noise.py
 src/pymicrostructure/traders/strategy.py
+src/pymicrostructure/utils/__init__.py
+src/pymicrostructure/utils/utils.py
 src/pymicrostructure/visualization/__init__.py
 src/pymicrostructure/visualization/summary.py
 tests/test_informed.py
