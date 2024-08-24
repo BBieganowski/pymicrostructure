@@ -50,7 +50,6 @@ This project and everyone participating in it is governed by the pymicrostructur
 
 pymicrostructure follows the [PEP 8](https://www.python.org/dev/peps/pep-0008/) style guide for Python code. Additionally:
 
-- Use 4 spaces for indentation (not tabs).
 - Use docstrings for all public classes, methods, and functions.
 - Keep line length to a maximum of 88 characters.
 - Use type hints for function arguments and return values.
