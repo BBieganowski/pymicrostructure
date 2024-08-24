@@ -3,7 +3,7 @@
 
 [project]
 name = "pymicrostructure"
-version = "0.0.1"
+version = "0.0.2"
 description = "Simulate financial markets"
 readme = "README.md"
 authors = [{ name = "Bartosz Bieganowski", email = "bartosz.bieganowski.office@gmail.com" }]
